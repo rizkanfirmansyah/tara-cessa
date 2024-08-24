@@ -491,7 +491,6 @@ export default function RoomManagementPage() {
                                 <td className="py-3 text-start font-medium">No.</td>
                                 <td className="py-3 text-start font-medium">Name Role</td>
                                 <td className="py-3 text-start font-medium">Can Manage Data</td>
-                                <td className="py-3 text-start font-medium">Can Manage Device</td>
                                 <td className="py-3 text-start font-medium">Can Manage Property</td>
                                 <td className="py-3 text-start font-medium">Can Manage User</td>
                                 <td className="py-3 text-start font-medium">FrontDesk</td>
@@ -506,9 +505,6 @@ export default function RoomManagementPage() {
                                         <td className="py-2 ">{role.name}</td>
                                         <td className="py-2">
                                             <InputBox className="col-span-3" checked={role.canManageData === 1} type="switch" name={"canManageData"} onChange={(e: ChangeEvent<HTMLInputElement>) => handleSwitchChange(e, role.id)} />
-                                        </td>
-                                        <td className="py-2 ">
-                                            <InputBox className="col-span-3" checked={role.canManageDevices === 1} type="switch" name={"canManageDevices"} onChange={(e: any) => handleSwitchChange(e, role.id)} />
                                         </td>
                                         <td className="py-2 ">
                                             <InputBox className="col-span-3" checked={role.canManageHotels === 1} type="switch" name={"canManageHotels"} onChange={(e: ChangeEvent<HTMLInputElement>) => handleSwitchChange(e, role.id)} />
