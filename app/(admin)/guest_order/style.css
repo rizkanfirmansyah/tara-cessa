@@ -1,0 +1,19 @@
+@media print {
+
+    body aside {
+        display: none;
+    }
+
+    body header {
+        display: none;
+    }
+
+    body .no-print {
+        display: none;
+    }
+
+    body div #mediaPrint {
+        display: block !important;
+        width: 100vw;
+    }
+}
