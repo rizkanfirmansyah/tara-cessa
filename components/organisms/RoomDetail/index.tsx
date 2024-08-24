@@ -1,5 +1,6 @@
 "use client";
 import { Button, Card, InputGroup, Modal, RoomGrid } from "@/components";
+import QR from "@/components/molecules/QR";
 import { useHotelStore } from "@/components/store/hotelStore";
 import { useRoomStore } from "@/components/store/roomStore";
 import { Alert } from "@/helpers/Alert";
@@ -8,9 +9,9 @@ import setFormEmpty from "@/helpers/FormInputCustom/empty";
 import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
 import { RoomManageType } from "@/types/RoomType";
-import { faPlus, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faPlus, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function RoomDetail() {
@@ -26,6 +27,7 @@ export default function RoomDetail() {
     let user = userSession;
     let bearerToken = user?.token ?? "";
     const itemsPerPage = 20;
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
         getData();
@@ -263,21 +265,30 @@ export default function RoomDetail() {
                 setModalRoom(true);
                 setModal(false);
             }}>
-                <div>
-                    <p className="text-gray-400">GUEST NAME</p>
-                    <h5 className="dark:text-white">{dataRoomDetail?.guestName}</h5>
-                </div>
-                <div>
-                    <p className="text-gray-400">WIFI SSID</p>
-                    <h5 className="dark:text-white">{dataRoomDetail?.wifiSsid}</h5>
+                <div className="flex justify-between">
+                    <div className="space-y-3">
+                        <div className="space-y-1">
+                            <p className="text-gray-400">GUEST NAME</p>
+                            <h5 className="dark:text-white">{dataRoomDetail?.guestName}</h5>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-gray-400">WIFI SSID</p>
+                            <h5 className="dark:text-white">{dataRoomDetail?.wifiSsid}</h5>
+                        </div>
+
+                        <div className="space-y-1">
+                            <p className="text-gray-400">WIFI PASSWORD</p>
+                            <h5 className="dark:text-white">{dataRoomDetail?.wifiPassword}</h5>
+                        </div>
+                    </div>
+                    <div>
+                        <QR text={dataRoomDetail?.link} />
+                    </div>
                 </div>
 
-                <div>
-                    <p className="text-gray-400">WIFI PASSWORD</p>
-                    <h5 className="dark:text-white">{dataRoomDetail?.wifiPassword}</h5>
+                <div className="flex justify-between">
+                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete Room</Button>
                 </div>
-
-                <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete Room</Button>
             </Modal>
         </>
     );
