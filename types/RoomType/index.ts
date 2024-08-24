@@ -6,6 +6,7 @@ interface RoomManageType {
   guestName: string;
   greetings: string;
   sender: string;
+  link: string;
   senderPosition: string;
   guestPhoto: string;
   macAddr: string;

@@ -1,17 +1,16 @@
 'use client'
 import { Card, CardChart, Dropdown, EventRow } from "@/components";
-import { faBellConcierge, faBriefcase, faBuilding, faCity, faCommentDots, faDoorClosed, faUtensils } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import { hotelID, userSession } from "@/helpers/UserData";
+import { useAmenetyStore } from "@/components/store/amenetyStore";
+import { useEventStore } from "@/components/store/eventStore";
+import { useFoodStore } from "@/components/store/foodStore";
 import { useHotelStore } from "@/components/store/hotelStore";
-import fetchCustom from "@/helpers/FetchCustom";
 import { useRoomStore } from "@/components/store/roomStore";
 import { Alert } from "@/helpers/Alert";
-import { useAmenetyStore } from "@/components/store/amenetyStore";
-import { useFoodStore } from "@/components/store/foodStore";
-import { useEventStore } from "@/components/store/eventStore";
+import fetchCustom from "@/helpers/FetchCustom";
+import { hotelID, userSession } from "@/helpers/UserData";
 import { EventType } from "@/types";
+import { faBellConcierge, faBriefcase, faBuilding, faCity, faDoorClosed, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
     const [event, setEvent] = useState("today");
