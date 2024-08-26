@@ -9,15 +9,7 @@ import "./style.css";
 
 export default function RoomManagementPage() {
     const { updateTitle } = useContext(MetaContext);
-    const [modal, setModal] = useState(false);
-    const [property, setProperty] = useState("");
-    const [branch, setBranch] = useState("");
-    const [city, setCity] = useState("");
-    const [province, setProvince] = useState("");
-    const [state, setState] = useState("");
-    const dataHotel = useHotelStore((state) => state.data);
     const hotelID = useHotelStore((state) => state.hotelID);
-    const updateData = useHotelStore((state) => state.updateData);
     let user = userSession;
 
     useEffect(() => {

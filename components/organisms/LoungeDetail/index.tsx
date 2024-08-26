@@ -193,7 +193,7 @@ export default function LoungeDetail() {
         <>
             <Card>
                 <div className="flex justify-between items-center">
-                    <h1 className="text-h5 font-semibold">List Rooms</h1>
+                    <h1 className="text-h5 font-semibold">List Table (Lounge)</h1>
                     <div className="flex ml-10 mr-2 space-x-3">
                         <Button theme="primary" onClick={() => setModalRoom(modalRoom ? false : true)}>
                             <FontAwesomeIcon icon={faPlus} />
