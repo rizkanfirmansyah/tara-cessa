@@ -18,4 +18,13 @@ interface RoomManageType {
   updatedAt: string;
 }
 
-export type { RoomManageType };
+interface LoungeType {
+  id: number;
+  hotelId: number;
+  tableName: string;
+  tableNo: string;
+  location: string;
+  link: string;
+}
+
+export type { RoomManageType, LoungeType };
