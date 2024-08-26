@@ -9,7 +9,7 @@ import setFormEmpty from "@/helpers/FormInputCustom/empty";
 import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
 import { RoomManageType } from "@/types/RoomType";
-import { faDownload, faPlus, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -205,7 +205,7 @@ export default function RoomDetail() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-5 gap-12 mt-10">
+                <div className="grid grid-cols-7 gap-12 mt-10">
                     {currentItems?.map((rooms: RoomManageType) => (
                         <RoomGrid
                             key={rooms.id}
