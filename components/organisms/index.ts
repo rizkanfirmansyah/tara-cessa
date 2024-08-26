@@ -7,21 +7,23 @@ import AmenetiesCategoryRow from "./AmenetiesCategoryRow";
 import Header from "./Header";
 import FoodRow from "./FoodRow";
 import RoomDetail from "./RoomDetail";
+import LoungeDetail from "./LoungeDetail";
 import RoomGrid from "./RoomGrid";
 import FacilityRow from "./FacilityRow";
 import EventRow from "./EventRow";
 
 export {
-    Sidebar,
-    Modal,
-    PropertyRow,
-    PropertyDetail,
-    AmenetiesRow,
-    AmenetiesCategoryRow,
-    Header,
-    FoodRow,
-    RoomDetail,
-    RoomGrid,
-    FacilityRow,
-    EventRow,
+  Sidebar,
+  Modal,
+  PropertyRow,
+  PropertyDetail,
+  AmenetiesRow,
+  AmenetiesCategoryRow,
+  Header,
+  FoodRow,
+  RoomDetail,
+  LoungeDetail,
+  RoomGrid,
+  FacilityRow,
+  EventRow,
 };
