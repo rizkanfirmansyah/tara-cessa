@@ -249,7 +249,7 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                         Facilities
                     </a> */}
                 </Dropdown>
-                <div className="inline-block relative">
+                {/* <div className="inline-block relative">
                     <h1 className="flex font-regular text-muted dark:bg-gray-900 bg-white dark:text-light px-4 py-1 cursor-pointer items-center rounded-3xl border-muted text-sm capitalize" onClick={() => router.push("/property/event")}>
                         Events
                     </h1>
@@ -258,7 +258,7 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                     <h1 className="flex font-regular text-muted dark:bg-gray-900 bg-white dark:text-light px-4 py-1 cursor-pointer items-center rounded-3xl border-muted text-sm capitalize" onClick={() => router.push("/property/feedback")}>
                         FeedBack
                     </h1>
-                </div>
+                </div> */}
             </div>
             <div id="body">
                 <div className="from-primary bg-gradient-to-br to-primary-70 dark:from-slate-900 dark:to-slate-700 p-6 rounded-lg m-6">

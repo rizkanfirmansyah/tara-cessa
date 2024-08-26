@@ -2,7 +2,7 @@
 import { useAuth } from "@/app/AuthProvider";
 import { logoBlack, logoWhite } from "@/components/atoms/Images";
 import { useSessionUser } from "@/components/store/userStore";
-import { faBoxArchive, faDoorOpen, faHotel, faMessage, faShop, faSquareCaretLeft, faSquarePollVertical, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faBoxArchive, faDoorOpen, faHotel, faMessage, faShop, faSquareCaretLeft, faSquarePollVertical, faUsers, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -38,6 +38,18 @@ export default function Sidebar() {
             icon: faDoorOpen,
             access: user.role.canManageDevices,
             text: "Room Management",
+        },
+        {
+            path: "/lounge_management",
+            icon: faPersonShelter,
+            access: user.role.canManageDevices,
+            text: "Lounge Management",
+        },
+        {
+            path: "/pooltable_management",
+            icon: faRestroom,
+            access: user.role.canManageDevices,
+            text: "Pooltable Management",
         },
         {
             access: user.role.frontdesk || 0,
