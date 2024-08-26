@@ -43,7 +43,7 @@ export default function InRoomDiningPage() {
     let bearerToken = user?.token ?? "";
 
     useEffect(() => {
-        updateTitle("In Room Dining Page");
+        updateTitle("Food Page");
         if (datas) {
             setDataFood(datas)
         }

@@ -239,15 +239,15 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                 </Dropdown>
                 <Dropdown title="Hotel Services" className="border-none" icon={faEllipsisVertical} isOpen={openDropdown === 'hotel-services'}
                     onDropdownClick={() => handleDropdownClick('hotel-services')}>
-                    <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/ameneties")}>
+                    {/* <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/ameneties")}>
                         Amenities
-                    </a>
+                    </a> */}
                     <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/inroomdining")} id="menu-item-1">
-                        in Room Dining
+                        Foods
                     </a>
-                    <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/facilities")} id="menu-item-2">
+                    {/* <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/facilities")} id="menu-item-2">
                         Facilities
-                    </a>
+                    </a> */}
                 </Dropdown>
                 <div className="inline-block relative">
                     <h1 className="flex font-regular text-muted dark:bg-gray-900 bg-white dark:text-light px-4 py-1 cursor-pointer items-center rounded-3xl border-muted text-sm capitalize" onClick={() => router.push("/property/event")}>
