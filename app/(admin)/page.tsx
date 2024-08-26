@@ -125,17 +125,17 @@ export default function DashboardPage() {
         <div>
             <div className="grid grid-cols-4 gap-4">
                 <CardChart icon={faBuilding} up={true} title={"Properties"} value={`${dataHotels?.length ?? 0}`} />
-                <CardChart theme="danger" icon={faCity} up={true} title={"Branchs"} value={"0"} />
-                <CardChart theme="primary" icon={faDoorClosed} up={false} title={"Rooms"} value={`${dataRooms?.length}`} />
+                {/* <CardChart theme="danger" icon={faCity} up={true} title={"Branchs"} value={"0"} /> */}
+                <CardChart theme="primary" icon={faDoorClosed} up={false} title={"Rooms/Table"} value={`${dataRooms?.length}`} />
                 <CardChart theme="warning" icon={faBriefcase} up={false} title={"Occupancies"} value={``} />
-                <CardChart theme="secondary" icon={faUtensils} up={true} title={"Amenities"} value={`${dataAmaneties?.length}`} />
-                <CardChart icon={faBellConcierge} up={false} title={"In Room Dining"} value={`${dataFoods?.length}`} />
+                {/* <CardChart theme="secondary" icon={faUtensils} up={true} title={"Amenities"} value={`${dataAmaneties?.length}`} /> */}
+                <CardChart icon={faBellConcierge} up={false} title={"Food"} value={`${dataFoods?.length}`} />
             </div>
             <div className="grid grid-cols-5 gap-4 mt-6">
                 <Card className="col-span-2">
                     <div className="grid">
                         <div className="header flex justify-between">
-                            <h1 className="text-h5 font-semibold text-dark dark:text-light">Upcoming Events</h1>
+                            <h1 className="text-h5 font-semibold text-dark dark:text-light">List Room/Table</h1>
                             <Dropdown title={event} >
                                 <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setEvent("today")} id="menu-item-0">Today</a>
                                 <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setEvent("weeks")} id="menu-item-1">Weeks</a>
@@ -145,7 +145,7 @@ export default function DashboardPage() {
 
                         <div id="body" className="w-full mt-4">
                             <table className="w-full">
-                                <thead>
+                                {/* <thead>
                                     <tr className="ext-start border-b-[1px] text-muted dark:text-light border-light">
                                         <td className="py-3 text-start font-medium">No.</td>
                                         <td className="py-3 text-start font-medium">Event</td>
@@ -161,12 +161,12 @@ export default function DashboardPage() {
                                                 event={event}
                                             />
                                         ))}
-                                </tbody>
+                                </tbody> */}
                             </table>
                         </div>
                     </div>
                 </Card>
-                <Card className="col-span-3">
+                {/* <Card className="col-span-3">
                     <div className="grid">
                         <div className="header flex justify-between">
                             <h1 className="text-h5 font-semibold text-dark dark:text-light">Recent Feedback</h1>
@@ -193,7 +193,7 @@ export default function DashboardPage() {
                             </table>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
             </div >
         </div >
     );
