@@ -11,7 +11,7 @@ interface AmenityCategoryType {
 interface AmenityType {
   id: number;
   categoryId: number;
-  amenityCategory: AmenityCategoryType;
+  foodCategory: AmenityCategoryType;
   name: string;
   description: string;
   img: string;

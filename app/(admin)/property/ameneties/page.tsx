@@ -8,7 +8,6 @@ import setFormEmpty from "@/helpers/FormInputCustom/empty";
 import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
 import { AmenityCategoryType, AmenityType } from "@/types";
-import { AmenityItemType } from "@/types/GuestOrder";
 import { faEdit, faRepeat, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,7 +37,7 @@ export default function AmenetiesPage() {
     const updateDataCategory = useAmenetyStore((state) => state.updateDataCategory);
 
     useEffect(() => {
-        updateTitle("Amenities Page");
+        updateTitle("Foods Page");
         return () => {
             updateTitle("Dashboard");
         };
@@ -62,7 +61,7 @@ export default function AmenetiesPage() {
     }
 
     const getDataAmenety = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/amenities`, bearerToken)
+        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods`, bearerToken)
             .then((result) => {
                 if (result.error) {
                     throw new Error("Error fteching");
@@ -77,7 +76,7 @@ export default function AmenetiesPage() {
     };
 
     const getDataAmenetyCategory = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/amenity_categories`, bearerToken)
+        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories`, bearerToken)
             .then((result) => {
                 if (result.error) {
                     throw new Error("Error fteching");
@@ -90,9 +89,9 @@ export default function AmenetiesPage() {
             });
     };
 
-    // http://9.9.9.2:8000/hotels/24/amenities/165/8
+    // http://9.9.9.2:8000/hotels/24/foods/165/8
     const deleteDataAmenety = async (id: number, category: number) => {
-        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/amenities/${category}/${id}`;
+        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods/${category}/${id}`;
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
 
@@ -158,7 +157,7 @@ export default function AmenetiesPage() {
             availability,
         });
 
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/24/amenities/${category}`;
+        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/24/foods/${category}`;
         if (amenetyID && amenetyID > 0) {
             url += "/" + amenetyID;
         }
@@ -206,7 +205,7 @@ export default function AmenetiesPage() {
             name: newCategory,
         });
 
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/amenity_categories`;
+        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories`;
         if (amenetyCategoryID && amenetyCategoryID > 0) {
             url += "/" + amenetyCategoryID;
         }
@@ -262,7 +261,7 @@ export default function AmenetiesPage() {
             return;
         }
 
-        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/amenity_categories/${amenetyCategoryID}`;
+        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories/${amenetyCategoryID}`;
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
 
@@ -300,7 +299,7 @@ export default function AmenetiesPage() {
         <div className="grid grid-cols gap-6">
             <Card className="col-span-2">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-h5 font-semibold">List Amenities</h1>
+                    <h1 className="text-h5 font-semibold">List Foods</h1>
                     <Dropdown
                         title={
                             Category > 0
@@ -354,7 +353,7 @@ export default function AmenetiesPage() {
                     <thead>
                         <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
                             <td className="py-3 text-start font-medium">No.</td>
-                            <td className="py-3 text-start font-medium">Amenities Name</td>
+                            <td className="py-3 text-start font-medium">Foods Name</td>
                             <td className="py-3 text-start font-medium">Price</td>
                             <td className="py-3 text-start font-medium">Stock</td>
                             <td className="py-3 text-start font-medium">Category</td>
@@ -383,7 +382,7 @@ export default function AmenetiesPage() {
             </Card>
 
             <Modal
-                title={update ? "Update Amenities" : "Insert Amenities"}
+                title={update ? "Update Foods" : "Insert Foods"}
                 show={modalAmeneties}
                 onSave={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}
                 onClosed={() => {
@@ -454,7 +453,7 @@ export default function AmenetiesPage() {
                         </div>
                     </div>
                 )}
-                <InputGroup theme="horizontal" label={"Amenities Name"} type={"text"} name="name" />
+                <InputGroup theme="horizontal" label={"Foods Name"} type={"text"} name="name" />
                 <InputGroup theme="horizontal" label={"Price"} type={"number"} name="price" />
                 <InputGroup theme="horizontal" label={"Stock"} type={"number"} name="stock" />
                 <InputGroup theme="horizontal" label={"Description"} type={"text"} name="description" />

@@ -27,7 +27,7 @@ const AmenetiesRow = ({ index, amenety, onClick, onEdit, onDelete }: AmenetiesRo
             </td>
             <td className="py-2 ">{FormatPrice(amenety.price)}</td>
             <td className="py-2 ">{amenety.stock}</td>
-            <td className="py-2 ">{amenety.amenityCategory.name}</td>
+            <td className="py-2 ">{amenety?.foodCategory?.name}</td>
             <td className="py-2 ">{amenety.availability ? 'ada' : 'tidak'}</td>
             <td className="py-2 space-x-2">
                 <Button theme='warning' onClick={onEdit}>
