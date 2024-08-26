@@ -102,7 +102,7 @@ export default function InRoomDiningPage() {
     };
 
     const getAdditionalData = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/foodAdd`, bearerToken)
+        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/food_add`, bearerToken)
             .then((result) => {
                 if (result.error) {
                     throw new Error("Error fteching");
@@ -242,7 +242,7 @@ export default function InRoomDiningPage() {
             price: additionalPrice,
         });
 
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/foodAdd`;
+        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/food_add`;
         if (additionalID && additionalID > 0) {
             url += "/" + additionalID;
         }
@@ -282,7 +282,7 @@ export default function InRoomDiningPage() {
     };
 
     const handleDeleteAdditional = async (id: number) => {
-        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/foodAdd/${id}`;
+        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/food_add/${id}`;
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
 
