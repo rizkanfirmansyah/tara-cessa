@@ -27,4 +27,13 @@ interface LoungeType {
   link: string;
 }
 
-export type { RoomManageType, LoungeType };
+interface PoolTableType {
+  id: number;
+  hotelId: number;
+  tableName: string;
+  tableNo: string;
+  location: string;
+  link: string;
+}
+
+export type { RoomManageType, LoungeType, PoolTableType };

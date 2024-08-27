@@ -1,9 +1,10 @@
 "use client";
 import { MetaContext } from "@/app/MetaProvider";
-import { Card, LoungeDetail, PropertyNotSelect } from "@/components";
+import { Card, PropertyNotSelect } from "@/components";
+import PoolTableDetail from "@/components/organisms/PoolTableDetail";
 import { useHotelStore } from "@/components/store/hotelStore";
 import { userSession } from "@/helpers/UserData";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./style.css";
 
 export default function RoomManagementPage() {
@@ -21,7 +22,7 @@ export default function RoomManagementPage() {
 
     return (
         <div className="grid grid-cols-3">
-            <Card className="col-span-6 p-0">{(hotelID && hotelID > 0) ? <LoungeDetail /> : <PropertyNotSelect />}</Card>
+            <Card className="col-span-6 p-0">{(hotelID && hotelID > 0) ? <PoolTableDetail /> : <PropertyNotSelect />}</Card>
         </div>
     );
 }
