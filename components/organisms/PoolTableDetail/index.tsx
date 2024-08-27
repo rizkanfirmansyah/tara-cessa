@@ -2,7 +2,7 @@
 import { Button, Card, InputGroup, Modal, RoomGrid } from "@/components";
 import QR from "@/components/molecules/QR";
 import { useHotelStore } from "@/components/store/hotelStore";
-import { useLoungeStore } from "@/components/store/loungeStore";
+import { usePoolStore } from "@/components/store/poolStore";
 import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import setFormEmpty from "@/helpers/FormInputCustom/empty";
@@ -20,10 +20,10 @@ export default function PoolTableDetail() {
     const [detailRoomID, setDetailRoomID] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const hotelID = useHotelStore((state) => state.hotelID);
-    const dataRoom = useLoungeStore((state) => state.data);
-    const updateData = useLoungeStore((state) => state.updateData);
-    const dataRoomDetail = useLoungeStore((state) => state.dataDetail);
-    const updateDataDetail = useLoungeStore((state) => state.updateDataDetail);
+    const dataRoom = usePoolStore((state) => state.data);
+    const updateData = usePoolStore((state) => state.updateData);
+    const dataRoomDetail = usePoolStore((state) => state.dataDetail);
+    const updateDataDetail = usePoolStore((state) => state.updateDataDetail);
     let user = userSession;
     let bearerToken = user?.token ?? "";
     const itemsPerPage = 20;
