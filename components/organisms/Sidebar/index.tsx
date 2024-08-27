@@ -52,14 +52,14 @@ export default function Sidebar() {
             text: "Pooltable Management",
         },
         {
-            access: user.role.frontdesk || 0,
+            access: user.role.order || 0,
             text: "Apps",
         },
         {
             path: "/guest_order",
             icon: faShop,
-            access: user.role.frontdesk || 0,
-            text: "Guest Order",
+            access: user.role.order || 0,
+            text: "Order",
         },
         {
             path: "/chat",
