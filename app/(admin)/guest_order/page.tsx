@@ -419,7 +419,7 @@ export default function GuestOrderPage({ }) {
                     </Card>
                 )}
             </div>
-            <div className={`${detail ? "col-span-1" : "hidden"}`} id="mediaPrint" onClick={() => window.print()}>
+            <div className={`${detail ? "col-span-1" : "hidden"}`} id="mediaPrint" >
                 <Card className="h-full">
                     <div className="border-b-[1px] border-semigray -mx-6 px-6 pb-3">
                         <h1 className="font-semibold text-subtitle">Order Detail</h1>
@@ -458,7 +458,7 @@ export default function GuestOrderPage({ }) {
                                     </div>
                                 </div>
                             )}
-                            <Button theme="primary" className="w-full mt-5 py-4 hover:bg-light hover:text-primary hover:border-primary no-print">
+                            <Button theme="primary" className="w-full mt-5 py-4 hover:bg-light hover:text-primary hover:border-primary no-print" onClick={() => window.print()}>
                                 Print Transaction
                             </Button>
                         </div>
