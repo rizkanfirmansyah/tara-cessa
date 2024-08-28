@@ -248,12 +248,12 @@
             "poolNo": null,
             "tableNo": "11",
             "guestName": "Ahmad",
-            "orderDate": "2024-08-28 13:39:32.6801092",
+            "orderDate": "2024-08-28 13:44:32.6801092",
             "paymentMethod": "table",
             "verified": 0,
-            "preparing": 0,
+            "preparing": 1,
             "delivery": 0,
-            "arrived": 1,
+            "arrived": 0,
             "paid": 0,
             "foodItems": [
                 {

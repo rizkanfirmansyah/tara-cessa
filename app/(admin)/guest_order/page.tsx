@@ -282,7 +282,7 @@ export default function GuestOrderPage({ }) {
     };
 
     useEffect(() => {
-        updateTitle("Guest Order");
+        updateTitle("Order");
         return () => {
             updateTitle("Dashboard");
         };
