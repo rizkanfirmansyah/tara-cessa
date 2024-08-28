@@ -121,14 +121,14 @@ export default function PropertyPage() {
     return (
         <div className="grid grid-cols-3 gap-6">
             <Card>
-                <h1 className="text-h5 font-semibold">List Properties</h1>
-                <ButtonActions onClickAdd={user?.roleId == 1 ? () => setModal(modal ? false : true) : false} onSearch={(e) => searchHotels(e.target.value)} onClickRepeat={() => getData()} />
+                <h1 className="text-h5 font-semibold">Profile Hotel</h1>
+                <ButtonActions onSearch={(e) => searchHotels(e.target.value)} onClickRepeat={() => getData()} />
                 <table className="w-full mt-5">
                     <thead>
                         <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
                             <td className="py-3 text-start font-medium">No.</td>
                             <td className="py-3 text-start font-medium">Property Name</td>
-                            <td className="py-3 text-start font-medium">Branch</td>
+                            <td className="py-3 text-start font-medium">Location</td>
                         </tr>
                     </thead>
                     <tbody>
