@@ -1,15 +1,17 @@
 'use client'
-import { Card, CardChart, Dropdown, EventRow } from "@/components";
-import { useAmenetyStore } from "@/components/store/amenetyStore";
+import { Card, CardChart, Dropdown, EventRow, RoomRow } from "@/components";
 import { useEventStore } from "@/components/store/eventStore";
 import { useFoodStore } from "@/components/store/foodStore";
 import { useHotelStore } from "@/components/store/hotelStore";
+import { useLoungeStore } from "@/components/store/loungeStore";
+import { usePoolStore } from "@/components/store/poolStore";
 import { useRoomStore } from "@/components/store/roomStore";
 import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import { hotelID, userSession } from "@/helpers/UserData";
 import { EventType } from "@/types";
-import { faBellConcierge, faBriefcase, faBuilding, faCity, faDoorClosed, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { RoomManageType } from "@/types/RoomType";
+import { faBellConcierge, faBuilding, faDoorClosed, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
@@ -19,22 +21,22 @@ export default function DashboardPage() {
     const dataHotels = useHotelStore((state) => state.data);
     const updateDataHotel = useHotelStore((state) => state.updateData);
     const dataRooms = useRoomStore((state) => state.data);
+    const dataTables = useLoungeStore((state) => state.data);
+    const updateDataLounge = useLoungeStore((state) => state.updateData);
+    const dataPoolTables = usePoolStore((state) => state.data);
+    const updateDataPoolTables = usePoolStore((state) => state.updateData);
     const updateDataRoom = useRoomStore((state) => state.updateData);
-    const dataAmaneties = useAmenetyStore((state) => state.data);
-    const updateDataAmenety = useAmenetyStore((state) => state.updateData);
     const dataFoods = useFoodStore((state) => state.data);
     const updateDataFood = useFoodStore((state) => state.updateData);
-    const dataEvents = useEventStore((state) => state.data);
-    const updateEvent = useEventStore((state) => state.updateData);
     let user = userSession;
     let bearerToken = user?.token ?? "";
 
     useEffect(() => {
         getDataHotel();
         getDataRoom();
-        getDataAmenety();
+        getDataTable();
+        getDataPoolTable();
         getDataFoods();
-        getDataEvent();
     }, []);
 
     function getDataHotel() {
@@ -76,20 +78,44 @@ export default function DashboardPage() {
             });
     };
 
-
-    const getDataAmenety = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/amenities`, bearerToken)
+    function getDataTable() {
+        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/tables`, bearerToken)
             .then((result) => {
                 if (result.error) {
-                    throw new Error("Error fteching");
+                    throw new Error(result.data.message);
                 } else {
-                    updateDataAmenety(result.data.data);
+                    const res = result.data.data;
+                    updateDataLounge(res);
                 }
             })
             .catch((error) => {
-                console.error("Error fetching data:", error);
+                Alert({
+                    title: 'Warning',
+                    desc: error,
+                    icon: 'warning'
+                });
             });
     };
+
+    function getDataPoolTable() {
+        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/pool-tables`, bearerToken)
+            .then((result) => {
+                if (result.error) {
+                    throw new Error(result.data.message);
+                } else {
+                    const res = result.data.data;
+                    updateDataPoolTables(res);
+                }
+            })
+            .catch((error) => {
+                // Alert({
+                //     title: 'Warning',
+                //     desc: error,
+                //     icon: 'warning'
+                // });
+            });
+    };
+
 
     const getDataFoods = () => {
         fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods`, bearerToken)
@@ -106,29 +132,14 @@ export default function DashboardPage() {
     };
 
 
-    const getDataEvent = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/events`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error("Error fteching");
-                } else {
-                    updateEvent(result.data.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    }
-
 
     return (
         <div>
             <div className="grid grid-cols-4 gap-4">
-                <CardChart icon={faBuilding} up={true} title={"Properties"} value={`${dataHotels?.length ?? 0}`} />
                 {/* <CardChart theme="danger" icon={faCity} up={true} title={"Branchs"} value={"0"} /> */}
                 <CardChart theme="primary" icon={faDoorClosed} up={false} title={"Rooms/Table"} value={`${dataRooms?.length}`} />
-                <CardChart theme="warning" icon={faBriefcase} up={false} title={"Occupancies"} value={``} />
-                {/* <CardChart theme="secondary" icon={faUtensils} up={true} title={"Amenities"} value={`${dataAmaneties?.length}`} /> */}
+                <CardChart theme="secondary" icon={faPersonShelter} up={true} title={"Table"} value={`${dataTables?.length}`} />
+                <CardChart icon={faRestroom} up={true} title={"Pool Table"} value={`${dataPoolTables?.length ?? 0}`} />
                 <CardChart icon={faBellConcierge} up={false} title={"Food"} value={`${dataFoods?.length}`} />
             </div>
             <div className="grid grid-cols-5 gap-4 mt-6">
@@ -145,23 +156,23 @@ export default function DashboardPage() {
 
                         <div id="body" className="w-full mt-4">
                             <table className="w-full">
-                                {/* <thead>
+                                <thead>
                                     <tr className="ext-start border-b-[1px] text-muted dark:text-light border-light">
-                                        <td className="py-3 text-start font-medium">No.</td>
-                                        <td className="py-3 text-start font-medium">Event</td>
+                                        <td className="py-3 text-start font-medium">No</td>
+                                        <td className="py-3 text-start font-medium">Info Room</td>
                                         <td className="py-3 text-start font-medium">Created At</td>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {dataEvents &&
-                                        dataEvents.map((event: EventType, index: number) => (
-                                            <EventRow
-                                                key={event.id}
+                                    {dataRooms &&
+                                        dataRooms.map((room: RoomManageType, index: number) => (
+                                            <RoomRow
+                                                key={room.id}
                                                 index={index + 1}
-                                                event={event}
+                                                room={room}
                                             />
                                         ))}
-                                </tbody> */}
+                                </tbody>
                             </table>
                         </div>
                     </div>
