@@ -97,8 +97,9 @@ export default function LoginPage() {
         <div className="text-black dark:text-white p-12">
             <div className="p-5">
                 <h1 className="text-subtitle font-semibold text-dark ps-3 dark:text-light">
-                    {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
-                    {currentTheme !== "dark" && <Image src={logoBlack} width={250} height={100} alt="logo" />}
+                    {/* {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
+                    {currentTheme !== "dark" && <Image src={logoBlack} width={250} height={100} alt="logo" />} */}
+                    <h1 className="uppercase text-left text-h3 text-dark dark:text-white">Cessa Hotel </h1>
                 </h1>
             </div>
             <div className="grid grid-cols-2 xl:gap-28 xl:my-8 xl:mx-32">

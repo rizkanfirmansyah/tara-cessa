@@ -126,8 +126,9 @@ export default function Sidebar() {
             {/* <div className="flex justify-between items-center desktop-lg:px-12 desktop-xl:px-16 desktop-2xl:px-20 py-[14px]"> */}
             <div className="p-5">
                 <h1 className="text-subtitle font-semibold text-dark ps-3 dark:text-light">
-                    {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
-                    {currentTheme !== "dark" && <Image src={logoBlack} width={250} height={100} alt="logo" />}
+                    {/* {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
+                    {currentTheme !== "dark" && <Image src={logoBlack} width={250} height={100} alt="logo" />} */}
+                    <h1 className="uppercase text-center text-h3 text-dark dark:text-white">Cessa Hotel</h1>
                 </h1>
             </div>
 
