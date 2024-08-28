@@ -41,12 +41,12 @@ export default function CardChart({ icon, up, title, value, theme, percentage, d
         <Card>
             <h3 className="text-sm flex items-center justify-start"><div className={`${themes[themeSelect]} dark:bg-dark w-6 h-6 rounded-full flex justify-center items-center`}><FontAwesomeIcon className={`w-4  ${themesIcon[themeSelect]} dark:text-light`} icon={icon} /></div> <span className="ms-3">{title}</span></h3>
             <h1 className="text-h4 font-semibold mt-2">{value}</h1>
-            {up ? (
+            {/* {up ? (
                 <span className="text-sm flex text-green-60 mt-2"><FontAwesomeIcon className="w-4 text-success" icon={faArrowTrendUp} /> <span className="mx-1 text-success">{percentage ?? ''}</span> <span className="text-muted">{description ?? 'in the last 1 month'}</span></span>
             ) :
                 (
                     <span className="text-sm flex text-green-60 mt-2"><FontAwesomeIcon className="w-4 text-danger" icon={faArrowTrendDown} /> <span className="mx-1 text-danger">{percentage ?? ''}</span> <span className="text-muted">{description ?? 'in the last 1 month'}</span></span>
-                )}
+                )} */}
         </Card>
     );
 }
