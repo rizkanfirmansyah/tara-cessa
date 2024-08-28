@@ -208,7 +208,7 @@ export default function PoolTableDetail() {
                     {currentItems?.map((rooms: PoolTableType) => (
                         <RoomGrid
                             key={rooms.id}
-                            name={rooms.tableNo}
+                            name={rooms.poolTableNo}
                             // active={rooms.active}
                             // onClick={() => updateRowState(rooms.id)}
                             onClick={() => {
@@ -255,10 +255,10 @@ export default function PoolTableDetail() {
                 <InputGroup theme="horizontal" label={"Location"} type={"text"} name="location" />
             </Modal>
 
-            <Modal title={`Room: ${dataRoomDetail?.tableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
+            <Modal title={`Room: ${dataRoomDetail?.poolTableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
                 setDetailRoomID(dataRoomDetail?.id || 0)
-                setFormValue("tableName", dataRoomDetail?.tableName)
-                setFormValue("tableNo", dataRoomDetail?.tableNo)
+                setFormValue("tableName", dataRoomDetail?.poolTableName)
+                setFormValue("tableNo", dataRoomDetail?.poolTableNo)
                 setFormValue("location", dataRoomDetail?.location)
                 setModalRoom(true);
                 setModal(false);
@@ -267,11 +267,11 @@ export default function PoolTableDetail() {
                     <div className="space-y-3">
                         <div className="space-y-1">
                             <p className="text-gray-400">TABLE NAME</p>
-                            <h5 className="dark:text-white">{dataRoomDetail?.tableName}</h5>
+                            <h5 className="dark:text-white">{dataRoomDetail?.poolTableName}</h5>
                         </div>
                         <div className="space-y-1">
                             <p className="text-gray-400">TABLE NO</p>
-                            <h5 className="dark:text-white">{dataRoomDetail?.tableNo}</h5>
+                            <h5 className="dark:text-white">{dataRoomDetail?.poolTableNo}</h5>
                         </div>
 
                         <div className="space-y-1">

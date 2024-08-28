@@ -30,8 +30,8 @@ interface LoungeType {
 interface PoolTableType {
   id: number;
   hotelId: number;
-  tableName: string;
-  tableNo: string;
+  poolTableName: string;
+  poolTableNo: string;
   location: string;
   link: string;
 }
