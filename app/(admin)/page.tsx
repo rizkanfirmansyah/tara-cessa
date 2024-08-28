@@ -1,5 +1,5 @@
 'use client'
-import { Card, CardChart, Dropdown, EventRow, RoomRow } from "@/components";
+import { Card, CardChart, Dropdown, EventRow, LoungeRow, RoomRow } from "@/components";
 import { useEventStore } from "@/components/store/eventStore";
 import { useFoodStore } from "@/components/store/foodStore";
 import { useHotelStore } from "@/components/store/hotelStore";
@@ -10,7 +10,7 @@ import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import { hotelID, userSession } from "@/helpers/UserData";
 import { EventType } from "@/types";
-import { RoomManageType } from "@/types/RoomType";
+import { LoungeType, RoomManageType } from "@/types/RoomType";
 import { faBellConcierge, faBuilding, faDoorClosed, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
@@ -138,20 +138,15 @@ export default function DashboardPage() {
             <div className="grid grid-cols-4 gap-4">
                 {/* <CardChart theme="danger" icon={faCity} up={true} title={"Branchs"} value={"0"} /> */}
                 <CardChart theme="primary" icon={faDoorClosed} up={false} title={"Rooms/Table"} value={`${dataRooms?.length}`} />
-                <CardChart theme="secondary" icon={faPersonShelter} up={true} title={"Table"} value={`${dataTables?.length}`} />
+                <CardChart theme="secondary" icon={faPersonShelter} up={true} title={"Table/Lounge"} value={`${dataTables?.length}`} />
                 <CardChart icon={faRestroom} up={true} title={"Pool Table"} value={`${dataPoolTables?.length ?? 0}`} />
                 <CardChart icon={faBellConcierge} up={false} title={"Food"} value={`${dataFoods?.length}`} />
             </div>
-            <div className="grid grid-cols-5 gap-4 mt-6">
+            <div className="grid grid-cols-4 gap-4 mt-6">
                 <Card className="col-span-2">
                     <div className="grid">
                         <div className="header flex justify-between">
-                            <h1 className="text-h5 font-semibold text-dark dark:text-light">List Room/Table</h1>
-                            <Dropdown title={event} >
-                                <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setEvent("today")} id="menu-item-0">Today</a>
-                                <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setEvent("weeks")} id="menu-item-1">Weeks</a>
-                                <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setEvent("see all")} id="menu-item-2">See All</a>
-                            </Dropdown>
+                            <h1 className="text-h5 font-semibold text-dark dark:text-light">List Room</h1>
                         </div>
 
                         <div id="body" className="w-full mt-4">
@@ -177,34 +172,35 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </Card>
-                {/* <Card className="col-span-3">
+                <Card className="col-span-2">
                     <div className="grid">
                         <div className="header flex justify-between">
-                            <h1 className="text-h5 font-semibold text-dark dark:text-light">Recent Feedback</h1>
-                            <Dropdown title={feedback} >
-                                <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setFeedback("today")} id="menu-item-0">Today</a>
-                                <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setFeedback("weeks")} id="menu-item-1">Weeks</a>
-                                <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setFeedback("see all")} id="menu-item-2">See All</a>
-                            </Dropdown>
+                            <h1 className="text-h5 font-semibold text-dark dark:text-light">List Table</h1>
                         </div>
 
                         <div id="body" className="w-full mt-4">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
-                                        <td className="py-3 text-start font-medium">No.</td>
-                                        <td className="py-3 text-start font-medium">Guest</td>
-                                        <td className="py-3 text-start font-medium">Comment</td>
-                                        <td className="py-3 text-start font-medium">Rate</td>
-                                        <td className="py-3 text-start font-medium">Action</td>
+                                    <tr className="ext-start border-b-[1px] text-muted dark:text-light border-light">
+                                        <td className="py-3 text-start font-medium">No</td>
+                                        <td className="py-3 text-start font-medium">Info Table</td>
+                                        <td className="py-3 text-start font-medium">Link</td>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {dataTables &&
+                                        dataTables.map((lounge: LoungeType, index: number) => (
+                                            <LoungeRow
+                                                key={lounge.id}
+                                                index={index + 1}
+                                                table={lounge}
+                                            />
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </Card> */}
+                </Card>
             </div >
         </div >
     );

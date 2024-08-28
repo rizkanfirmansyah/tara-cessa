@@ -12,6 +12,7 @@ import RoomGrid from "./RoomGrid";
 import FacilityRow from "./FacilityRow";
 import EventRow from "./EventRow";
 import RoomRow from "./RoomRow";
+import LoungeRow from "./LoungeRow";
 
 export {
   Sidebar,
@@ -28,4 +29,5 @@ export {
   FacilityRow,
   EventRow,
   RoomRow,
+  LoungeRow,
 };
