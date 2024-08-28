@@ -1,0 +1,198 @@
+{
+    "response_code": 0,
+    "message": "success",
+    "data": [
+        {
+            "id": 2,
+            "hotelId": 1,
+            "roomId": null,
+            "roomNo": "2",
+            "poolNo": null,
+            "tableNo": null,
+            "guestName": "Udin",
+            "orderDate": "2024-08-26 21:51:56.9220895",
+            "paymentMethod": "Cash",
+            "verified": 1,
+            "preparing": 0,
+            "delivery": 0,
+            "arrived": 0,
+            "paid": 0,
+            "foodItems": [
+                {
+                    "id": 2,
+                    "orderId": 2,
+                    "foodId": 1,
+                    "name": "Makanan A",
+                    "price": 66666,
+                    "qty": 2,
+                    "note": "Less spicy",
+                    "prepared": 0,
+                    "foodAdditional": null,
+                    "createdAt": "2024-08-26T14:52:05Z",
+                    "updatedAt": "2024-08-26T14:52:05Z"
+                },
+                {
+                    "id": 3,
+                    "orderId": 2,
+                    "foodId": 1,
+                    "name": "Makanan B",
+                    "price": 66666,
+                    "qty": 2,
+                    "note": "Less spicy 2",
+                    "prepared": 0,
+                    "foodAdditional": [
+                        {
+                            "id": 1,
+                            "foodItemId": 3,
+                            "name": "Additional Makanan B 1",
+                            "price": 1111,
+                            "createdAt": "2024-08-26T14:52:05Z",
+                            "updatedAt": "2024-08-26T14:52:05Z"
+                        },
+                        {
+                            "id": 2,
+                            "foodItemId": 3,
+                            "name": "Additional Makanan B 2",
+                            "price": 2222,
+                            "createdAt": "2024-08-26T14:52:05Z",
+                            "updatedAt": "2024-08-26T14:52:05Z"
+                        }
+                    ],
+                    "createdAt": "2024-08-26T14:52:05Z",
+                    "updatedAt": "2024-08-26T14:52:05Z"
+                }
+            ],
+            "createdAt": "2024-08-26T14:52:05Z",
+            "updatedAt": "2024-08-26T14:52:05Z"
+        },
+        {
+            "id": 3,
+            "hotelId": 1,
+            "roomId": null,
+            "roomNo": "12",
+            "poolNo": null,
+            "tableNo": null,
+            "guestName": "Udin",
+            "orderDate": "2024-08-27 09:31:48.7975824",
+            "paymentMethod": "Cash",
+            "verified": 1,
+            "preparing": 0,
+            "delivery": 0,
+            "arrived": 0,
+            "paid": 0,
+            "foodItems": [
+                {
+                    "id": 4,
+                    "orderId": 3,
+                    "foodId": 1,
+                    "name": "Makanan A",
+                    "price": 66666,
+                    "qty": 2,
+                    "note": "Less spicy",
+                    "prepared": 0,
+                    "foodAdditional": null,
+                    "createdAt": "2024-08-27T02:31:48Z",
+                    "updatedAt": "2024-08-27T02:31:48Z"
+                },
+                {
+                    "id": 5,
+                    "orderId": 3,
+                    "foodId": 1,
+                    "name": "Makanan B",
+                    "price": 66666,
+                    "qty": 2,
+                    "note": "Less spicy 2",
+                    "prepared": 0,
+                    "foodAdditional": [
+                        {
+                            "id": 3,
+                            "foodItemId": 5,
+                            "name": "Additional Makanan B 1",
+                            "price": 1111,
+                            "createdAt": "2024-08-27T02:31:48Z",
+                            "updatedAt": "2024-08-27T02:31:48Z"
+                        },
+                        {
+                            "id": 4,
+                            "foodItemId": 5,
+                            "name": "Additional Makanan B 2",
+                            "price": 2222,
+                            "createdAt": "2024-08-27T02:31:48Z",
+                            "updatedAt": "2024-08-27T02:31:48Z"
+                        }
+                    ],
+                    "createdAt": "2024-08-27T02:31:48Z",
+                    "updatedAt": "2024-08-27T02:31:48Z"
+                }
+            ],
+            "createdAt": "2024-08-27T02:31:48Z",
+            "updatedAt": "2024-08-27T02:31:48Z"
+        },
+        {
+            "id": 4,
+            "hotelId": 1,
+            "roomId": null,
+            "roomNo": null,
+            "poolNo": "12",
+            "tableNo": null,
+            "guestName": "rizkan",
+            "orderDate": "2024-08-28 12:32:50.6601975",
+            "paymentMethod": "room",
+            "verified": 1,
+            "preparing": 0,
+            "delivery": 0,
+            "arrived": 0,
+            "paid": 0,
+            "foodItems": [
+                {
+                    "id": 6,
+                    "orderId": 4,
+                    "foodId": 1,
+                    "name": "Ikan Salmon",
+                    "price": 200000,
+                    "qty": 3,
+                    "note": "Note:  \nAdditional: \nQuantity: 2\n",
+                    "prepared": 0,
+                    "foodAdditional": null,
+                    "createdAt": "2024-08-28T05:32:51Z",
+                    "updatedAt": "2024-08-28T05:32:51Z"
+                }
+            ],
+            "createdAt": "2024-08-28T05:32:51Z",
+            "updatedAt": "2024-08-28T05:32:51Z"
+        },
+        {
+            "id": 5,
+            "hotelId": 1,
+            "roomId": null,
+            "roomNo": null,
+            "poolNo": "12",
+            "tableNo": null,
+            "guestName": "Sultan",
+            "orderDate": "2024-08-28 13:39:32.6801092",
+            "paymentMethod": "room",
+            "verified": 1,
+            "preparing": 0,
+            "delivery": 0,
+            "arrived": 0,
+            "paid": 0,
+            "foodItems": [
+                {
+                    "id": 7,
+                    "orderId": 5,
+                    "foodId": 1,
+                    "name": "Ikan Salmon",
+                    "price": 200000,
+                    "qty": 2,
+                    "note": "Note:  \nAdditional: \nQuantity: 2\n",
+                    "prepared": 0,
+                    "foodAdditional": null,
+                    "createdAt": "2024-08-28T06:39:33Z",
+                    "updatedAt": "2024-08-28T06:39:33Z"
+                }
+            ],
+            "createdAt": "2024-08-28T06:39:33Z",
+            "updatedAt": "2024-08-28T06:39:33Z"
+        }
+    ]
+}

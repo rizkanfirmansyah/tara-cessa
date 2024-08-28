@@ -4,22 +4,23 @@ import { Button, Card, CardFood, InputBox } from "@/components";
 import { imageFood, imageFood2, imageFood3, imageFood4 } from "@/components/atoms/Images";
 import { useOrderStore } from "@/components/store/guestOrderStore";
 import { useHotelStore } from "@/components/store/hotelStore";
+import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import FormatPrice from "@/helpers/FormatPrice";
 import { userSession } from "@/helpers/UserData";
-import { HotelType, OrderType } from "@/types";
-import { faBookOpen, faCheckCircle, faList, faRepeat, faSearch, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
+import { OrderType } from "@/types";
+import { faBookOpen, faCheckCircle, faDoorOpen, faList, faPersonShelter, faRepeat, faRestroom, faSearch, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useState } from "react";
-import './style.css';
 import Swal from "sweetalert2";
-import { Alert } from "@/helpers/Alert";
+import './style.css';
 
 export default function GuestOrderPage({ }) {
     const [tab, setTab] = useState("list");
     const [subHarga, setSubHarga] = useState(0);
     const [PPN, setPPN] = useState(0);
     const [History, setHistory] = useState(0);
+    const [Category, setCategory] = useState("all");
     const [detail, setDetail] = useState(false);
     const [dataDetail, setDataDetail] = useState<OrderType | null>(null);
     const [dataOrder, setdataOrder] = useState<OrderType[] | []>([]);
@@ -41,47 +42,97 @@ export default function GuestOrderPage({ }) {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-    const getDataOrder = (hotelID: number, history: number = 0) => {
+    const getDataOrder = (hotelID: number, history: number = 0, category = "all") => {
         fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/order`, bearerToken)
             .then((result) => {
                 if (result.error) {
-                    throw new Error("Error fteching");
+                    throw new Error("Error fetching");
                 } else {
-                    const res = result.data.data.sort((a: any, b: any) => {
+                    let res = result.data.data.sort((a: any, b: any) => {
                         const dateA = new Date(a.orderDate);
                         const dateB = new Date(b.orderDate);
 
-                        if (dateA > dateB) {
-                            return -1;
-                        }
-                        if (dateA < dateB) {
-                            return 1;
-                        }
-                        return 0;
+                        return dateB.getTime() - dateA.getTime();
                     }).filter((item: any) => item.paid === history);
-                    setHistory(history)
 
-                    if (history) {
-                        if (dataOrder && dataOrder?.length < res?.length) {
-                            Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru !' })
-                        }
+                    if (category === "room") {
+                        res = res.filter((item: any) => item.roomNo !== null && item.roomNo !== 0);
+                    } else if (category === "table") {
+                        res = res.filter((item: any) => item.tableNo !== null && item.tableNo !== 0);
+                    } else if (category === "pooltable") {
+                        res = res.filter((item: any) => item.poolNo !== null && item.poolNo !== 0);
+                    }
+
+                    setHistory(history);
+                    setCategory(category);
+
+                    if (history && dataOrder && dataOrder?.length < res?.length) {
+                        Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru !' });
                     }
 
                     updateData(res);
                     setdataOrder(res);
-
                 }
             })
             .catch((error) => {
-                console.error("Error fetching data:", error);
+                if (error.message === "Error fetching" || error.response?.status === 500) {
+                    fetch('/assets/data/unitdata.json')
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Failed to fetch local data");
+                            }
+                            return response.json();
+                        })
+                        .then((localData) => {
+                            let res = localData.data.sort((a: any, b: any) => {
+                                const dateA = new Date(a.orderDate);
+                                const dateB = new Date(b.orderDate);
+
+                                return dateB.getTime() - dateA.getTime();
+                            }).filter((item: any) => item.paid === history);
+
+                            if (category === "room") {
+                                res = res.filter((item: any) => item.roomNo !== null && item.roomNo !== 0);
+                            } else if (category === "table") {
+                                res = res.filter((item: any) => item.tableNo !== null && item.tableNo !== 0);
+                            } else if (category === "pooltable") {
+                                res = res.filter((item: any) => item.poolNo !== null && item.poolNo !== 0);
+                            }
+
+                            setCategory(category);
+                            setHistory(history);
+
+                            updateData(res);
+                            setdataOrder(res);
+                        })
+                        .catch((localError) => {
+                            console.error("Error fetching local data:", localError);
+                        });
+                }
             });
+
     };
 
     function searchOrder(searchCriteria: string) {
         if (datas) {
-            const res: OrderType[] = datas.filter(order =>
-                (searchCriteria ? order.roomNo.includes(searchCriteria) : true)
-            );
+            const res: OrderType[] = datas.filter(order => {
+                if (searchCriteria) {
+                    if (order.roomNo?.includes(searchCriteria)) {
+                        return true;
+                    }
+                    if (order.tableNo?.includes(searchCriteria)) {
+                        return true;
+                    }
+                    if (order.poolNo?.includes(searchCriteria)) {
+                        return true;
+                    }
+                    if (order.guestName?.includes(searchCriteria)) {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            });
             setdataOrder(res);
         }
     }
@@ -147,13 +198,15 @@ export default function GuestOrderPage({ }) {
             if (order.arrived === 1) return "Paid";
             if (order.delivery === 1) return "Arrived";
             if (order.preparing === 1) return "Delivery";
+            if (order.verified === 1) return "Prepairing";
 
-            return "Preparing";
+            return "Verified";
         } else {
             if (order.paid === 1) return "Paid";
             if (order.arrived === 1) return "Arrived";
             if (order.delivery === 1) return "Delivery";
             if (order.preparing === 1) return "Preparing";
+            if (order.verified === 1) return "Verified";
 
             return "In Order";
         }
@@ -164,6 +217,7 @@ export default function GuestOrderPage({ }) {
         if (order.arrived === 1) return "gray-200";
         if (order.delivery === 1) return "yellow-700";
         if (order.preparing === 1) return "primary";
+        if (order.verified === 1) return "transparent";
 
         return "white";
     };
@@ -181,6 +235,7 @@ export default function GuestOrderPage({ }) {
         else if (order.delivery === 0) data = { delivery: 1 };
         else if (order.arrived === 0) data = { arrived: 1 };
         else if (order.paid === 0) data = { paid: 1 };
+        else if (order.verified === 0) data = { verified: 1 };
         const jsonData = JSON.stringify(data);
 
         const result = await Swal.fire({
@@ -194,7 +249,7 @@ export default function GuestOrderPage({ }) {
         });
 
         if (result.isConfirmed) {
-            let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/order/${order.roomId}/${order.id}`;
+            let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/order/${order.id}`;
 
             // const formdata = new FormData();
             // formdata.append("data", jsonData);
@@ -237,28 +292,35 @@ export default function GuestOrderPage({ }) {
         <div className="grid grid-cols-3 gap-5">
             <div className={`${detail ? "col-span-2" : "col-span-3"} no-print`}>
                 <Card>
-                    <div className="flex gap-10 items-center -my-2 -mx-2">
-                        <div className="flex items-center w-2/3 mr-10">
+                    <div className="flex gap-10 justify-between items-center -my-2 -mx-2">
+                        <div className="flex items-center w-1/3 mr-10">
                             <InputBox type={"text"} className="inline" onChange={(e: { target: { value: string; }; }) => searchOrder(e.target.value)} />
                             <FontAwesomeIcon icon={faSearch} className="w-6 text-h5 -ml-8 cursor-pointer" />
                         </div>
-                        <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary w-full col-span-3 p-2.5 dark:bg-light dark:border-dark dark:placeholder-dark dark:text-dark dark:focus:ring-primary dark:focus:border-primary" onChange={(e) => getDataOrder(parseInt(e.target.value))}>
-                            {dataHotel &&
-                                dataHotel.map((data: HotelType, key: number) => (
-                                    <option className="w-full" value={data.id} key={key}>
-                                        {data.name}
-                                    </option>
-                                ))}
-                        </select>
                         <div className="flex border-muted border-[1px] rounded-lg">
+                            <div className={`${Category === "room" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
+                                getDataOrder(hotelID ?? 0, 0, "room")
+                            }} title="Room Data">
+                                <FontAwesomeIcon icon={faDoorOpen} className="w-10  h-[20px]" />
+                            </div>
+                            <div className={`${Category === "table" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
+                                getDataOrder(hotelID ?? 0, 0, "table")
+                            }} title="Lounge Data">
+                                <FontAwesomeIcon icon={faPersonShelter} className="w-10  h-[20px]" />
+                            </div>
+                            <div className={`${Category === "pooltable" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
+                                getDataOrder(hotelID ?? 0, 0, "pooltable")
+                            }} title="Pool Table Data">
+                                <FontAwesomeIcon icon={faRestroom} className="w-10  h-[20px]" />
+                            </div>
                             <div className={`${History ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
                                 getDataOrder(hotelID ?? 0, 1)
-                            }}>
+                            }} title="History Data">
                                 <FontAwesomeIcon icon={faBookOpen} className="w-10  h-[20px]" />
                             </div>
-                            <div className={`${!History ? "bg-primary-15 text-white" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-tr-[7px] rounded-br-[7px] pe-4 ps-3 pt-2.5 pb-2`} onClick={() => {
+                            <div className={`${!History && Category === "all" ? "bg-primary-15 text-white" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-tr-[7px] rounded-br-[7px] pe-4 ps-3 pt-2.5 pb-2`} onClick={() => {
                                 getDataOrder(hotelID ?? 0)
-                            }} >
+                            }} title="All Data">
                                 <FontAwesomeIcon icon={faRepeat} className="w-10 h-[20px]" />
                             </div>
                         </div>
@@ -287,7 +349,8 @@ export default function GuestOrderPage({ }) {
                             <thead>
                                 <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
                                     <td className="py-3 text-start font-medium">No.</td>
-                                    <td className="py-3 text-start font-medium">Room Number</td>
+                                    <td className="py-3 text-start font-medium">Number Order</td>
+                                    <td className="py-3 text-start font-medium">Guest Name</td>
                                     <td className="py-3 text-start font-medium">Status</td>
                                     <td className="py-3 text-start font-medium">Order Date</td>
                                     <td className="py-3 text-start font-medium">Change Status</td>
@@ -298,7 +361,13 @@ export default function GuestOrderPage({ }) {
                                 {currentItems?.map((value, index) => (
                                     <tr className="text-start border-b-[1px] text-dark dark:text-light border-light" key={"order" + index + value.id}>
                                         <td className="py-3 text-start font-medium text-sm ">{index + 1 + indexOfFirstItem}</td>
-                                        <td className="py-3 text-start font-medium text-sm ">{value.roomNo}</td>
+                                        <td className="py-3 text-start font-medium text-sm ">{value.roomNo} {value.tableNo} {value.poolNo}
+                                            {value.roomNo && " (Room)"}
+                                            {value.tableNo && " (Lounge)"}
+                                            {value.poolNo && " (PoolTable)"}
+
+                                        </td>
+                                        <td className="py-3 text-start font-medium text-sm ">{value.guestName} </td>
                                         <td className={`py-3 text-start font-medium text-sm text-${getColor(value)}`}>{getStatus(value)}</td>
                                         <td className="py-3 text-start font-medium text-sm ">{getTimeDate(value.orderDate)}</td>
                                         <td className="py-3 text-start font-medium text-sm ">
