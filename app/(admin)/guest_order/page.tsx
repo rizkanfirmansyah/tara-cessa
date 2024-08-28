@@ -21,7 +21,7 @@ export default function GuestOrderPage({ }) {
     const [PPN, setPPN] = useState(0);
     const [History, setHistory] = useState(0);
     const [Category, setCategory] = useState("all");
-    const [detail, setDetail] = useState(false);
+    const [detail, setDetail] = useState(0);
     const [dataDetail, setDataDetail] = useState<OrderType | null>(null);
     const [dataOrder, setdataOrder] = useState<OrderType[] | []>([]);
     const { updateTitle } = useContext(MetaContext);
@@ -386,7 +386,11 @@ export default function GuestOrderPage({ }) {
                                                 className={`hover:bg-primary-15 bg-transparent hover:text-primary text-muted hover:bg-primary-15' transition-all duration-300 cursor-pointer rounded pe-4 ps-3 pt-2.5 pb-2`}
                                                 onClick={() => {
                                                     getdataDetail(value);
-                                                    setDetail(detail ? false : true);
+                                                    if (detail === value.id) {
+                                                        setDetail(0);
+                                                    } else {
+                                                        setDetail(value.id);
+                                                    }
                                                 }}
                                             >
                                                 <FontAwesomeIcon icon={faList} className="w-10 h-[20px]" />
