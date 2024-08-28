@@ -112,12 +112,6 @@ export default function GuestOrderPage({ }) {
         let dataHarga = 0;
         setPPN(0);
         setSubHarga(0);
-        if (value?.amenityItems && value.amenityItems.length > 0) {
-            dataHarga += value.amenityItems?.reduce((acc, amenity) => acc + amenity.qty * amenity.price, 0)
-        }
-        if (value?.facilityItems && value.facilityItems.length > 0) {
-            dataHarga += value.facilityItems.reduce((acc, facility) => acc + facility.qty * facility.price, 0)
-        }
         if (value?.foodItems && value.foodItems.length > 0) {
             dataHarga += value.foodItems.reduce((acc, food) => acc + food.qty * food.price, 0)
         }
@@ -361,35 +355,13 @@ export default function GuestOrderPage({ }) {
                     <div className="border-b-[1px] border-semigray -mx-6 px-6 pb-3">
                         <h1 className="font-semibold text-subtitle">Order Detail</h1>
                     </div>
-                    {dataDetail?.amenityItems == null && dataDetail?.facilityItems == null && dataDetail?.facilityItems == null && dataDetail?.foodItems == null ? (
+                    {dataDetail?.foodItems == null ? (
                         <div className="flex justify-center items-center h-full flex-col">
                             <FontAwesomeIcon icon={faShoppingBasket} className="text-muted text-[100px]" />
                             <h1 className="text-subtitle font-medium text-semigray mt-4">No Item Added</h1>
                         </div>
                     ) : (
                         <div className="w-full mt-5">
-                            {dataDetail.amenityItems &&
-                                dataDetail.amenityItems.map((amenity, index: number) => (
-                                    <div key={index + 1} className="flex justify-between items-center border-b-[1px] border-semigray py-6">
-                                        <div>
-                                            <p>{amenity.name}</p>
-                                            <p dangerouslySetInnerHTML={{ __html: amenity.note.replace(/(:|,)/g, '$1<br/>') }}></p>
-                                        </div>
-                                        <p className="border border-semigray px-4 py-1">{amenity.qty}</p>
-                                        <p>{FormatPrice(amenity.price)}</p>
-                                    </div>
-                                ))}
-                            {dataDetail.facilityItems &&
-                                dataDetail.facilityItems.map((facility, index: number) => (
-                                    <div key={index + 1} className="flex justify-between items-center border-b-[1px] border-semigray py-6">
-                                        <div>
-                                            <p>{facility.name}</p>
-                                            <p dangerouslySetInnerHTML={{ __html: facility.note.replace(/(:|,)/g, '$1<br/>') }}></p>
-                                        </div>
-                                        <p className="border border-semigray px-4 py-1">{facility.qty}</p>
-                                        <p>{FormatPrice(facility.price)}</p>
-                                    </div>
-                                ))}
                             {dataDetail.foodItems &&
                                 dataDetail.foodItems.map((food, index: number) => (
                                     <div key={index + 1} className={`flex justify-between items-center border-b-[1px] border-semigray py-6 ${index === dataDetail.foodItems.length - 1 ? "border-dashed mb-10" : ""}`}>

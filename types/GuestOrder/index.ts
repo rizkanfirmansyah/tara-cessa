@@ -54,6 +54,10 @@ interface OrderType {
   hotelId: number;
   roomId: number;
   roomNo: string;
+  poolNo: string;
+  tableNo: string;
+  paymentMethod: string;
+  guestName: string;
   orderDate: string;
   verified: number;
   preparing: number;
@@ -61,8 +65,6 @@ interface OrderType {
   arrived: number;
   paid: number;
   foodItems: FoodItemType[];
-  amenityItems: AmenityItemType[];
-  facilityItems: FacilityItemType[];
   roomTypeItems: any; // Kamu bisa menentukan tipe yang sesuai jika kamu tahu
   eventItems: any; // Kamu bisa menentukan tipe yang sesuai jika kamu tahu
   createdAt: string;
