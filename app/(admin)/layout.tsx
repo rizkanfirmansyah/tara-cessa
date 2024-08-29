@@ -10,8 +10,8 @@ import { AuthProvider } from "../AuthProvider";
 const dmsans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Siorta - Dashboard Apps",
-    description: "Siorta, order taker dashboard apps modern",
+    title: "Thara - Dashboard",
+    description: "Thara - Dashboard",
 };
 
 export default function RootLayout({
