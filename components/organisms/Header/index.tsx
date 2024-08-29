@@ -43,8 +43,8 @@ export default function Header({ }) {
         <header className="flex py-6 px-8 border-b-2 shadow-md border-light dark:border-gray-700 z-20 relative no-print">
             <div className="flex justify-between items-center w-full">
                 <h1 className="text-subtitle font-medium">{title} { }</h1>
-                <div className="flex justify-between w-44">
-                    <Dropdown title="awdaw" header={imgElement} className="h-9 border-primary px-0 py-0 border-none w-44" isOpen={openDropdown === 'basic-info'}
+                <div className="flex justify-between -44">
+                    <Dropdown title="awdaw" header={""} className="h-9 border-primary px-0 py-0 border-none w-44" isOpen={openDropdown === 'basic-info'}
                         onDropdownClick={() => handleDropdownClick('basic-info')}>
                         {/* <a href="#" className=" dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
                         <a href="#" className=" dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">Settings</a> */}
