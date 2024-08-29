@@ -36,19 +36,19 @@ export default function Sidebar() {
         {
             path: "/room_management",
             icon: faDoorOpen,
-            access: user.role.canManageDevices,
+            access: user.role.canManageData,
             text: "Room Management",
         },
         {
             path: "/lounge_management",
             icon: faPersonShelter,
-            access: user.role.canManageDevices,
+            access: user.role.canManageData,
             text: "Lounge Management",
         },
         {
             path: "/pooltable_management",
             icon: faRestroom,
-            access: user.role.canManageDevices,
+            access: user.role.canManageData,
             text: "Pooltable Management",
         },
         {
