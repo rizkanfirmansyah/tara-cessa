@@ -277,7 +277,7 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-3 gap-10 px- h-60 mx-32">
+                <div className="justify-center gap-10 px- h-76 mx-auto flex">
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-light">
                         {dataProfile?.logoColor && <Image src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoColor} alt="Logo Primary" width={200} height={200} className="w-full" />}
                         <Button className="w-full">Main Logo</Button>
