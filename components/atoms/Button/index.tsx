@@ -8,13 +8,14 @@ interface ButtonProps {
     theme?: ThemeType;
     className?: string;
     size?: string;
+    title?: string;
     disabled?: boolean;
     type?: ButtonType;
     children?: ReactNode;
     onClick?: () => void;
 }
 
-export default function Button({ onClick, children, theme, className, size, type, disabled }: ButtonProps) {
+export default function Button({ onClick, children, theme, className, size, type, title, disabled }: ButtonProps) {
     const themeSelect = theme ?? "default";
     const themes: Record<ThemeType, string> = {
         default: "bg-primary text-light ",
@@ -27,7 +28,7 @@ export default function Button({ onClick, children, theme, className, size, type
         danger: "bg-danger text-light ",
     };
     return (
-        <button type={type ?? "button"} className={`${disabled ? themes["secondary"] : themes[themeSelect]} ${size == "sm" ? "px-2" : "px-5"} py-2 rounded-md ${className}`} onClick={onClick} disabled={disabled}>
+        <button title={title} type={type ?? "button"} className={`${disabled ? themes["secondary"] : themes[themeSelect]} ${size == "sm" ? "px-2" : "px-5"} py-2 rounded-md ${className}`} onClick={onClick} disabled={disabled}>
             {children}
         </button>
     );
