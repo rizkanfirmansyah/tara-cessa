@@ -93,7 +93,7 @@ export default function LoginPage() {
     const currentTheme = theme === "system" ? systemTheme : theme;
 
     return (
-        <div className="text-black dark:text-white p-12">
+        <div className="text-black dark:text-white dark:bg-slate-950">
             <div className="p-5">
                 <h1 className="text-subtitle font-semibold text-dark ps-3 dark:text-light">
                     {/* {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
@@ -133,8 +133,8 @@ export default function LoginPage() {
                         </p>
                     </div> */}
                 </div>
-                <div className="object-cover object-center h-[200px]">
-                    <Image className="object-cover object-center h-[600px] rounded-lg" src="/assets/images/logo.jpg" width={600} height={50} alt="awdawd" />
+                <div className="flex ">
+                    <Image className="object-cover object-center h-2/3 rounded-lg" src="/assets/images/logo.jpg" width={600} height={50} alt="awdawd" />
                 </div>
             </div>
         </div>
