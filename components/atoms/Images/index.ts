@@ -7,5 +7,7 @@ import imageFood4 from "../../../public/assets/images/img-food4.png";
 import logo from "../../../public/assets/images/siorta.png";
 import logoWhite from "../../../public/assets/images/siorta-white.png";
 import logoBlack from "../../../public/assets/images/siorta-black.png";
+import logoCessa from "../../../public/assets/images/logoTab.jpg";
+import gambarCessa from "../../../public/assets/images/logo.jpg";
 
 export { imageHotel1, imageHotel2, imageFood, imageFood2, imageFood3, imageFood4, logo, logoBlack, logoWhite };

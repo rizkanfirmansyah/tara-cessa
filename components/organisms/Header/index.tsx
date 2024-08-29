@@ -35,7 +35,7 @@ export default function Header({ }) {
     }, [router])
 
     const title = metaContext ? metaContext.title : "Dashboard";
-    const imgElement = <><img src="https://i.ibb.co/gd5RRwz/Ellipse-7.png" className="rounded-full w-[35px]" alt="An example image" width="50" height={50} /><span className="ml-3">{nameUser}</span></>;
+    const imgElement = <><img src="/assets/images/logoTab.jpg" className="rounded-full w-[35px]" alt="An example image" width="50" height={50} /><span className="ml-3">{nameUser}</span></>;
     const notificationEl = <button>
         <FontAwesomeIcon icon={faBell} className="w-6 dark:text-light" />
     </button>;
@@ -44,7 +44,7 @@ export default function Header({ }) {
             <div className="flex justify-between items-center w-full">
                 <h1 className="text-subtitle font-medium">{title} { }</h1>
                 <div className="flex justify-between w-44">
-                    <Dropdown title="awdaw" header={""} className="h-9 border-primary px-0 py-0 border-none w-44" isOpen={openDropdown === 'basic-info'}
+                    <Dropdown title="awdaw" header={imgElement} className="h-9 border-primary px-0 py-0 border-none w-44" isOpen={openDropdown === 'basic-info'}
                         onDropdownClick={() => handleDropdownClick('basic-info')}>
                         {/* <a href="#" className=" dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
                         <a href="#" className=" dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">Settings</a> */}

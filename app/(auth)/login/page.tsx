@@ -133,8 +133,8 @@ export default function LoginPage() {
                         </p>
                     </div> */}
                 </div>
-                <div className="">
-                    <Image src="/image-login.png" width={600} height={600} alt="awdawd" />
+                <div className="object-cover object-center h-[200px]">
+                    <Image className="object-cover object-center h-[600px] rounded-lg" src="/assets/images/logo.jpg" width={600} height={50} alt="awdawd" />
                 </div>
             </div>
         </div>
