@@ -109,7 +109,7 @@ export default function LoginPage() {
                     <form action="#" className="mt-10 mr-16" onSubmit={handleSubmit}>
                         <InputGroup className="mt-6" label="Username" name="email" value={""} type="text" />
                         <InputGroup className="mt-6" label="Password" name="password" value={""} type="password" />
-                        <div className="flex justify-between mt-3">
+                        {/* <div className="flex justify-between mt-3">
                             <div className="flex">
                                 <input type="checkbox" className="border-dark" />
                                 <p className="ms-1">Remember Me</p>
@@ -117,21 +117,21 @@ export default function LoginPage() {
                             <a href="#" className="text-muted font-medium">
                                 Forgot Password
                             </a>
-                        </div>
+                        </div> */}
                         <div className="mt-10">
                             <button type="submit" className="w-full p-3 rounded-lg text-center bg-primary text-white font-medium text-body dark:bg-gray-600" disabled={isLoading ? true : false}>
                                 {isLoading ? "Loading...." : "Login"}
                             </button>
                         </div>
                     </form>
-                    <div className="mt-5 text-center">
+                    {/* <div className="mt-5 text-center">
                         <p className="text-muted">
                             Do you have account?{" "}
                             <a href="#" className="underline text-primary ">
                                 Sign Up
                             </a>
                         </p>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="">
                     <Image src="/image-login.png" width={600} height={600} alt="awdawd" />
