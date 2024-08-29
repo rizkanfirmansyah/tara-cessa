@@ -138,8 +138,8 @@ export default function DashboardPage() {
             <div className="grid grid-cols-4 gap-4">
                 {/* <CardChart theme="danger" icon={faCity} up={true} title={"Branchs"} value={"0"} /> */}
                 <CardChart theme="primary" icon={faDoorClosed} up={false} title={"Rooms/Table"} value={`${dataRooms?.length}`} />
-                <CardChart theme="secondary" icon={faPersonShelter} up={true} title={"Table/Lounge"} value={`${dataTables?.length}`} />
-                <CardChart icon={faRestroom} up={true} title={"Pool Table"} value={`${dataPoolTables?.length ?? 0}`} />
+                <CardChart theme="secondary" icon={faPersonShelter} up={true} title={"Lounge/Table"} value={`${dataTables?.length}`} />
+                <CardChart icon={faRestroom} up={true} title={"Pool/Table"} value={`${dataPoolTables?.length ?? 0}`} />
                 <CardChart icon={faBellConcierge} up={false} title={"Food"} value={`${dataFoods?.length}`} />
             </div>
             <div className="grid grid-cols-4 gap-4 mt-6">

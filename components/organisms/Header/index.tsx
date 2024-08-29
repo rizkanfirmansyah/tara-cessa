@@ -44,7 +44,7 @@ export default function Header({ }) {
             <div className="flex justify-between items-center w-full">
                 <h1 className="text-subtitle font-medium">{title} { }</h1>
                 <div className="flex justify-between -44">
-                    <Dropdown title="awdaw" header={""} className="h-9 border-primary px-0 py-0 border-none w-44" isOpen={openDropdown === 'basic-info'}
+                    <Dropdown title={nameUser} header={""} className="h-9 border-primary px-0 py-0 border-none w-44" isOpen={openDropdown === 'basic-info'}
                         onDropdownClick={() => handleDropdownClick('basic-info')}>
                         {/* <a href="#" className=" dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
                         <a href="#" className=" dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">Settings</a> */}
