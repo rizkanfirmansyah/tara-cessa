@@ -13,6 +13,7 @@ import { faPlus, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
+import "./style.css";
 
 export default function RoomDetail() {
     const [modal, setModal] = useState(false);
@@ -265,7 +266,7 @@ export default function RoomDetail() {
                 setModalRoom(true);
                 setModal(false);
             }}>
-                <div className="flex justify-between">
+                <div className="flex justify-between" id="mediaPrint">
                     <div className="space-y-3">
                         <div className="space-y-1">
                             <p className="text-gray-400">GUEST NAME</p>
@@ -288,6 +289,7 @@ export default function RoomDetail() {
 
                 <div className="flex justify-between">
                     <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete Room</Button>
+                    <Button theme="primary" onClick={() => window.print()} >Print Data</Button>
                 </div>
             </Modal>
         </>
