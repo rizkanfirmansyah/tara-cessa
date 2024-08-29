@@ -80,7 +80,7 @@ export default function LoginPage() {
                     router.replace('/room_management');
                 }
                 if (data.data.role.frontdesk) {
-                    router.replace("/frontdesk");
+                    router.replace("/");
                 }
             }, 1500);
         } else {
