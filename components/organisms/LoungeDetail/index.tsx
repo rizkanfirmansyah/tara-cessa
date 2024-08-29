@@ -9,7 +9,7 @@ import setFormEmpty from "@/helpers/FormInputCustom/empty";
 import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
 import { LoungeType, RoomManageType } from "@/types/RoomType";
-import { faPersonShelter, faPlus, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faPersonShelter, faPlus, faQrcode, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -190,6 +190,33 @@ export default function LoungeDetail() {
         }
     }
 
+    const getQR = () => {
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + bearerToken);
+        const requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+        };
+        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/tables/link`;
+        fetch(url, requestOptions)
+            .then(async (response) => {
+                const data = await response.json();
+                return data;
+            })
+            .then((result) => {
+                if (result.response_code > 0) {
+                    throw new Error(result.message);
+                }
+            })
+            .catch((error) => {
+                Alert({
+                    title: 'Warning',
+                    desc: error,
+                    icon: 'warning'
+                })
+            });
+    };
+
     return (
         <>
             <Card>
@@ -201,6 +228,9 @@ export default function LoungeDetail() {
                         </Button>
                         <Button theme="secondary" onClick={() => getData()}>
                             <FontAwesomeIcon icon={faRepeat} />
+                        </Button>
+                        <Button title="Generated QR" theme="dark" onClick={() => getQR()}>
+                            <FontAwesomeIcon icon={faQrcode} />
                         </Button>
                     </div>
                 </div>

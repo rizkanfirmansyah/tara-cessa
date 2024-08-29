@@ -83,7 +83,7 @@ export default function RoomDetail() {
             });
     };
 
-    const getQR = (id: number) => {
+    const getQR = () => {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
         const requestOptions = {
