@@ -49,7 +49,7 @@ export default function Sidebar() {
             path: "/pooltable_management",
             icon: faRestroom,
             access: user.role.canManageData,
-            text: "Pooltable Management",
+            text: "Pool Management",
         },
         {
             access: user.role.order || 0,
