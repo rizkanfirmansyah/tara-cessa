@@ -54,7 +54,7 @@ export default function GuestOrderPage({ }) {
                         const dateB = new Date(b.orderDate);
 
                         return dateB.getTime() - dateA.getTime();
-                    }).filter((item: any) => item.paid === history);
+                    }).filter((item: any) => item.id > 0);
 
                     if (category === "room") {
                         res = res.filter((item: any) => item.roomNo !== null && item.roomNo !== 0);
@@ -64,16 +64,16 @@ export default function GuestOrderPage({ }) {
                         res = res.filter((item: any) => item.poolNo !== null && item.poolNo !== 0);
                     }
 
-                    setHistory(history);
+                    setHistory(History);
                     setCategory(category);
 
                     let idOrderLast = res[res?.length - 1]?.id;
                     if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
                         Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
                     }
-                    idLastOrder = idOrderLast;
                     updateData(res);
                     setdataOrder(res);
+                    idLastOrder = idOrderLast;
                 }
             })
             .catch((error) => {
@@ -177,24 +177,6 @@ export default function GuestOrderPage({ }) {
 
     }
 
-    useEffect(() => {
-        getDataHotel();
-        let hotelIDnum = hotelID ? hotelID : dataHotel?.[0].id;
-
-        const interval = setInterval(() => {
-            getDataOrder(hotelIDnum ?? parseInt(hotelIDnum ?? "0"));
-        }, (60 * 2) * 1000);
-
-        return () => clearInterval(interval);
-    }, [dataHotel, getDataOrder, hotelID]);
-
-    useEffect(() => {
-        let hotelIDnum = hotelID ? hotelID : dataHotel?.[0].id;
-        getDataOrder(hotelIDnum ?? parseInt(hotelIDnum ?? "0"));
-
-    }, [])
-
-
     const getStatus = (order: OrderType, num?: number): string => {
         if (num === 1) {
             if (order.paid === 1) return "Completed";
@@ -286,9 +268,7 @@ export default function GuestOrderPage({ }) {
 
 
     useEffect(() => {
-        setInterval(() => {
-            getDataOrder(hotelID ?? 0)
-        }, 2000);
+
         updateTitle("Order");
         return () => {
             updateTitle("Dashboard");
@@ -296,10 +276,17 @@ export default function GuestOrderPage({ }) {
 
     }, [updateTitle]);
 
+    useEffect(() => {
+        setInterval(() => {
+            getDataOrder(hotelID ?? 0, History, Category)
+        }, 2000);
+    }, [hotelID])
+
+
     return (
         <div className="grid grid-cols-3 gap-5">
             <div className={`${detail ? "col-span-2" : "col-span-3"} no-print`}>
-                <Card>
+                {/* <Card>
                     <div className="flex gap-10 justify-between items-center -my-2 -mx-2">
                         <div className="flex items-center w-1/3 mr-10">
                             <InputBox type={"text"} className="inline" onChange={(e: { target: { value: string; }; }) => searchOrder(e.target.value)} />
@@ -327,13 +314,14 @@ export default function GuestOrderPage({ }) {
                                 <FontAwesomeIcon icon={faRestroom} className="w-10  h-[20px]" />
                             </div>
                             <div className={`${History ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
+                                setHistory(1)
                                 getDataOrder(hotelID ?? 0, 1)
                             }} title="History Data">
                                 <FontAwesomeIcon icon={faBookOpen} className="w-10  h-[20px]" />
                             </div>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
                 {tab === "order" && (
                     <div className="grid grid-cols-4 gap-6 mt-5">
                         <CardFood title={"Pretzel Chicken Noodle Soup - Regular"} image={imageFood} />
