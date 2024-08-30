@@ -8,12 +8,62 @@ import fetchCustom from "@/helpers/FetchCustom";
 import FormatPrice from "@/helpers/FormatPrice";
 import { userSession } from "@/helpers/UserData";
 import { OrderType } from "@/types";
-import { faBookOpen, faCheckCircle, faDoorOpen, faList, faPersonShelter, faRepeat, faRestroom, faSearch, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faBookOpen, faCheckCircle, faDoorOpen, faList, faPersonShelter, faRectangleList, faRepeat, faRestroom, faSearch, faShoppingBasket, faUtensils, faWaterLadder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import './style.css';
 import { Alert } from "@/helpers/Alert";
+
+type Status = 'Completed' | 'Paid' | 'Arrived' | 'Delivery' | 'Preparing' | 'Verified' | 'In Order';
+type OrderSource = 'all' | 'room' | 'table' | 'pooltable';
+
+const getStatus = (order: OrderType, num?: number): Status => {
+    if (num === 1) {
+        if (order.paid === 1) return "Completed";
+        if (order.arrived === 1) return "Paid";
+        if (order.delivery === 1) return "Arrived";
+        if (order.preparing === 1) return "Delivery";
+        if (order.verified === 1) return "Preparing";
+
+        return "Verified";
+    } else {
+        if (order.paid === 1) return "Paid";
+        if (order.arrived === 1) return "Arrived";
+        if (order.delivery === 1) return "Delivery";
+        if (order.preparing === 1) return "Preparing";
+        if (order.verified === 1) return "Verified";
+
+        return "In Order";
+    }
+};
+
+const getColor = (order: OrderType): string => {
+    if (order.paid === 1) return "success";
+    if (order.arrived === 1) return "blue-500";
+    if (order.delivery === 1) return "yellow-700";
+    if (order.preparing === 1) return "primary";
+    if (order.verified === 1) return "transparent";
+
+    return "white";
+};
+
+const getTextColor = (order: OrderType): string => {
+    if (order.paid === 1) return "light";
+    if (order.arrived === 1) return "light";
+    if (order.delivery === 1) return "dark dark:text-light";
+    if (order.preparing === 1) return "light";
+    if (order.verified === 1) return "dark dark:text-light";
+
+    return "dark dark:text-light";
+};
+
+const getTimeDate = (timestamp: string) => {
+    const dateObject = new Date(timestamp);
+    const formattedDate = dateObject.toISOString().slice(0, 16).replace('T', ' ');
+
+    return formattedDate;
+}
 
 export default function GuestOrderPage({ }) {
     const [tab, setTab] = useState("list");
@@ -24,6 +74,8 @@ export default function GuestOrderPage({ }) {
     const [detail, setDetail] = useState(0);
     const [dataDetail, setDataDetail] = useState<OrderType | null>(null);
     const [dataOrder, setdataOrder] = useState<OrderType[] | []>([]);
+    const [filterStatus, setFilterStatus] = useState<Status[]>(['Verified', 'Preparing', 'In Order']);
+    const [filterSource, setFilterSource] = useState<OrderSource>('all');
     const { updateTitle } = useContext(MetaContext);
     const datas = useOrderStore((state) => state.data);
     // const dataDetail = useOrderStore((state) => state.dataDetail);
@@ -34,14 +86,33 @@ export default function GuestOrderPage({ }) {
     let user = userSession;
     let bearerToken = user?.token ?? "";
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15;
+    const itemsPerPage = 10;
     let idLastOrder = 0;
 
-    // const dataFiltered = dataOrder.filter(v => v.)
+    const dataFiltered = dataOrder.filter(v => {
+        const status = filterStatus.length === 0 || filterStatus.indexOf(getStatus(v)) >= 0;
+
+        let source = true;
+        switch (filterSource) {
+            case 'all':
+                source = true;
+                break;
+            case 'pooltable':
+                source = v.poolNo != null;
+                break;
+            case 'room':
+                source = v.roomNo != null;
+                break;
+            case 'table':
+                source = v.tableNo != null;
+                break;
+        }
+        return status && source;
+    });
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = dataOrder && dataOrder.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = dataFiltered.slice(indexOfFirstItem, indexOfLastItem);
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -191,53 +262,6 @@ export default function GuestOrderPage({ }) {
 
     }
 
-    const getStatus = (order: OrderType, num?: number): string => {
-        if (num === 1) {
-            if (order.paid === 1) return "Completed";
-            if (order.arrived === 1) return "Paid";
-            if (order.delivery === 1) return "Arrived";
-            if (order.preparing === 1) return "Delivery";
-            if (order.verified === 1) return "Prepairing";
-
-            return "Verified";
-        } else {
-            if (order.paid === 1) return "Paid";
-            if (order.arrived === 1) return "Arrived";
-            if (order.delivery === 1) return "Delivery";
-            if (order.preparing === 1) return "Preparing";
-            if (order.verified === 1) return "Verified";
-
-            return "In Order";
-        }
-    };
-
-    const getColor = (order: OrderType): string => {
-        if (order.paid === 1) return "success";
-        if (order.arrived === 1) return "blue-500";
-        if (order.delivery === 1) return "yellow-700";
-        if (order.preparing === 1) return "primary";
-        if (order.verified === 1) return "transparent";
-
-        return "white";
-    };
-
-    const getTextColor = (order: OrderType): string => {
-        if (order.paid === 1) return "light";
-        if (order.arrived === 1) return "light";
-        if (order.delivery === 1) return "dark dark:text-light";
-        if (order.preparing === 1) return "light";
-        if (order.verified === 1) return "dark dark:text-light";
-
-        return "dark dark:text-light";
-    };
-
-    const getTimeDate = (timestamp: string) => {
-        const dateObject = new Date(timestamp);
-        const formattedDate = dateObject.toISOString().slice(0, 16).replace('T', ' ');
-
-        return formattedDate;
-    }
-
     const handleChangeStatus = async (order: OrderType) => {
         let data: Object = {};
         if (order.preparing === 0) data = { preparing: 1 };
@@ -309,46 +333,91 @@ export default function GuestOrderPage({ }) {
         return () => clearInterval(intervalId);
     }, [hotelID, History, Category]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filterStatus, filterSource]);
 
     return (
         <div className="grid grid-cols-3 gap-5">
             <div className={`${detail ? "col-span-2" : "col-span-3"} no-print`}>
-                {/* <Card>
-                    <div className="flex gap-10 justify-between items-center -my-2 -mx-2">
-                        <div className="flex items-center w-1/3 mr-10">
-                            <InputBox type={"text"} className="inline" onChange={(e: { target: { value: string; }; }) => searchOrder(e.target.value)} />
-                            <FontAwesomeIcon icon={faSearch} className="w-6 text-h5 -ml-8 cursor-pointer" />
+                <Card>
+                    <div className="flex gap-5 items-center -my-2 -mx-2">
+                        <div className="flex border-muted border-[1px] rounded-full">
+                            <div
+                                className={`${filterSource === "all" ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-l-full p-3 pl-5`}
+                                onClick={() => setFilterSource('all')}
+                                title="All Data"
+                            >
+                                <div className="flex items-center gap-2 px-1">
+                                    <FontAwesomeIcon icon={faList} className="h-3.5" />
+                                    All
+                                </div>
+                            </div>
+                            <div
+                                className={`${filterSource === "room" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
+                                onClick={() => setFilterSource('room')}
+                                title="Room Data"
+                            >
+                                <div className="flex items-center gap-2 px-1">
+                                    <FontAwesomeIcon icon={faBed} className="h-3.5" />
+                                    Room
+                                </div>
+                            </div>
+                            <div 
+                                className={`${filterSource === "table" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`} 
+                                onClick={() => setFilterSource('table')}
+                                title="Lounge Data"
+                            >
+                                <div className="flex items-center gap-2 px-1">
+                                    <FontAwesomeIcon icon={faUtensils} className="h-3.5" />
+                                    Lounge
+                                </div>
+                            </div>
+                            <div
+                                className={`${filterSource === "pooltable" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-r-full p-3 pr-5`}
+                                onClick={() => setFilterSource('pooltable')}
+                                title="Pool Table Data">
+                                <div className="flex items-center gap-2 px-1">
+                                    <FontAwesomeIcon icon={faWaterLadder} className="h-3.5" />
+                                    Pool
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex border-muted border-[1px] rounded-lg">
-                            <div className={`${!History && Category === "all" ? "bg-primary-15 text-white" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-tr-[7px] rounded-br-[7px] pe-4 ps-3 pt-2.5 pb-2`} onClick={() => {
-                                getDataOrder(hotelID ?? 0)
-                            }} title="All Data">
-                                <FontAwesomeIcon icon={faRepeat} className="w-10 h-[20px]" />
+
+                        <div className="flex border-muted border-[1px] rounded-full">
+                            <div
+                                className={`${filterStatus.length === 0 ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-l-full p-3 pl-5`}
+                                onClick={() => setFilterStatus([])}
+                            >
+                                All
                             </div>
-                            <div className={`${Category === "room" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
-                                getDataOrder(hotelID ?? 0, 0, "room")
-                            }} title="Room Data">
-                                <FontAwesomeIcon icon={faDoorOpen} className="w-10  h-[20px]" />
+                            <div
+                                className={`${filterStatus.indexOf('Preparing') >= 0 ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer p-3`}
+                                onClick={() => setFilterStatus(['In Order', 'Preparing', 'Verified'])}
+                            >
+                                Kitchen
                             </div>
-                            <div className={`${Category === "table" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
-                                getDataOrder(hotelID ?? 0, 0, "table")
-                            }} title="Lounge Data">
-                                <FontAwesomeIcon icon={faPersonShelter} className="w-10  h-[20px]" />
+                            <div
+                                className={`${filterStatus.indexOf('Delivery') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
+                                onClick={() => setFilterStatus(['Delivery'])}
+                            >
+                                Delivery
                             </div>
-                            <div className={`${Category === "pooltable" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
-                                getDataOrder(hotelID ?? 0, 0, "pooltable")
-                            }} title="Pool Table Data">
-                                <FontAwesomeIcon icon={faRestroom} className="w-10  h-[20px]" />
+                            <div 
+                                className={`${filterStatus.indexOf('Arrived') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`} 
+                                onClick={() => setFilterStatus(['Arrived'])}
+                            >
+                                Payment
                             </div>
-                            <div className={`${History ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
-                                setHistory(1)
-                                getDataOrder(hotelID ?? 0, 1)
-                            }} title="History Data">
-                                <FontAwesomeIcon icon={faBookOpen} className="w-10  h-[20px]" />
+                            <div 
+                                className={`${filterStatus.indexOf('Completed') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3 pr-5 rounded-r-full`} 
+                                onClick={() => setFilterStatus(['Paid', 'Completed'])}
+                            >
+                                Completed
                             </div>
                         </div>
                     </div>
-                </Card> */}
+                </Card>
                 {tab === "order" && (
                     <div className="grid grid-cols-4 gap-6 mt-5">
                         <CardFood title={"Pretzel Chicken Noodle Soup - Regular"} image={imageFood} />
@@ -384,10 +453,10 @@ export default function GuestOrderPage({ }) {
                                 {currentItems?.map((value, index) => (
                                     <tr className="text-start border-b-[1px] text-dark dark:text-light border-light" key={"order" + index + value.id}>
                                         <td className="py-3 text-start font-medium text-sm ">{index + 1 + indexOfFirstItem}</td>
-                                        <td className="py-3 text-start font-medium text-sm ">{value.roomNo} {value.tableNo} {value.poolNo}
-                                            {value.roomNo && " (Room)"}
-                                            {value.tableNo && " (Lounge)"}
-                                            {value.poolNo && " (PoolTable)"}
+                                        <td className="py-3 text-start font-medium text-sm ">
+                                            {value.roomNo && `Room -  ${value.roomNo}`}
+                                            {value.tableNo && `Lounge Table - ${value.tableNo}`}
+                                            {value.poolNo && `Pool Table - ${value.poolNo}`}
 
                                         </td>
                                         <td className="py-3 text-start font-medium text-sm ">{value.guestName} </td>
@@ -426,19 +495,18 @@ export default function GuestOrderPage({ }) {
 
 
 
-                        {dataOrder && dataOrder.length > itemsPerPage && (
+                        {dataFiltered.length > itemsPerPage && (
                             <div className="flex justify-center mt-4">
                                 <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className={`dark:bg-gray-700 px-3 py-1 rounded-l ${currentPage === 1 ? "border-[1px] dark:border-gray-700 border-gray-200 text-gray-400 cursor-not-allowed" : "border-[1px] dark:border-gray-700 border-gray-200 hover:bg-gray-200 hover:dark:bg-gray-500"}`}>
                                     Prev
                                 </button>
-                                {dataOrder &&
-                                    dataOrder.length > 0 &&
-                                    [...Array(Math.ceil(dataOrder.length / itemsPerPage))].map((_, index) => (
+                                {dataFiltered.length > 0 &&
+                                    [...Array(Math.ceil(dataFiltered.length / itemsPerPage))].map((_, index) => (
                                         <button key={index} onClick={() => paginate(index + 1)} className={`mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? "bg-blue-500 text-white" : "border-[1px] border-gray-200 hover:dark:bg-gray-500 hover:bg-gray-200"}`}>
                                             {index + 1}
                                         </button>
                                     ))}
-                                <button onClick={() => paginate(currentPage + 1)} disabled={!dataOrder || currentPage === Math.ceil(dataOrder.length / itemsPerPage)} className={`dark:bg-gray-700 px-3 py-1 rounded-r ${!dataOrder || currentPage === Math.ceil(dataOrder.length / itemsPerPage) ? "border-[1px] dark:border-gray-700 border-gray-200 text-gray-400 cursor-not-allowed" : "border-[1px] dark:border-gray-700 border-gray-200 hover:bg-gray-200 hover:dark:bg-gray-500"}`}>
+                                <button onClick={() => paginate(currentPage + 1)} disabled={!dataFiltered || currentPage === Math.ceil(dataFiltered.length / itemsPerPage)} className={`dark:bg-gray-700 px-3 py-1 rounded-r ${!dataFiltered || currentPage === Math.ceil(dataFiltered.length / itemsPerPage) ? "border-[1px] dark:border-gray-700 border-gray-200 text-gray-400 cursor-not-allowed" : "border-[1px] dark:border-gray-700 border-gray-200 hover:bg-gray-200 hover:dark:bg-gray-500"}`}>
                                     Next
                                 </button>
                             </div>
