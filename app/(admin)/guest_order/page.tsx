@@ -67,7 +67,10 @@ export default function GuestOrderPage({ }) {
                     setHistory(History);
                     setCategory(category);
 
-                    let idOrderLast = res[res?.length - 1]?.id;
+                    let idOrderLast = res[0]?.id;
+                    console.log(idLastOrder);
+                    console.log(idOrderLast);
+
                     if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
                         Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
                     }
@@ -91,7 +94,7 @@ export default function GuestOrderPage({ }) {
                                 const dateB = new Date(b.orderDate);
 
                                 return dateB.getTime() - dateA.getTime();
-                            }).filter((item: any) => item.paid === history);
+                            }).filter((item: any) => item.id > 0);
 
                             if (category === "room") {
                                 res = res.filter((item: any) => item.roomNo !== null && item.roomNo !== 0);
@@ -104,8 +107,17 @@ export default function GuestOrderPage({ }) {
                             setCategory(category);
                             setHistory(history);
 
+                            let idOrderLast = res[0]?.id;
+                            console.log(idLastOrder);
+                            console.log(idOrderLast);
+
+                            if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
+                                Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
+                            }
+
                             updateData(res);
                             setdataOrder(res);
+                            idLastOrder = idOrderLast;
                         })
                         .catch((localError) => {
                             console.error("Error fetching local data:", localError);
@@ -276,11 +288,14 @@ export default function GuestOrderPage({ }) {
 
     }, [updateTitle]);
 
+
     useEffect(() => {
-        setInterval(() => {
-            getDataOrder(hotelID ?? 0, History, Category)
+        const intervalId = setInterval(() => {
+            getDataOrder(hotelID ?? 0, History, Category);
         }, 2000);
-    }, [hotelID])
+
+        return () => clearInterval(intervalId);
+    }, [hotelID, History, Category]);
 
 
     return (
