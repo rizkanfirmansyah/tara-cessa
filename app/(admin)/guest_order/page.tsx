@@ -66,9 +66,9 @@ export default function GuestOrderPage({ }) {
                     setHistory(history);
                     setCategory(category);
 
-                    if (history && dataOrder && dataOrder?.length < res?.length) {
-                        Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru !' });
-                    }
+                    // if (history && dataOrder && dataOrder?.length < res?.length) {
+                    //     Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru !' });
+                    // }
 
                     updateData(res);
                     setdataOrder(res);
@@ -195,6 +195,7 @@ export default function GuestOrderPage({ }) {
 
     const getStatus = (order: OrderType, num?: number): string => {
         if (num === 1) {
+            if (order.paid === 1) return "Completed";
             if (order.arrived === 1) return "Paid";
             if (order.delivery === 1) return "Arrived";
             if (order.preparing === 1) return "Delivery";
@@ -214,7 +215,7 @@ export default function GuestOrderPage({ }) {
 
     const getColor = (order: OrderType): string => {
         if (order.paid === 1) return "success";
-        if (order.arrived === 1) return "gray-200";
+        if (order.arrived === 1) return "blue-500";
         if (order.delivery === 1) return "yellow-700";
         if (order.preparing === 1) return "primary";
         if (order.verified === 1) return "transparent";
@@ -298,6 +299,11 @@ export default function GuestOrderPage({ }) {
                             <FontAwesomeIcon icon={faSearch} className="w-6 text-h5 -ml-8 cursor-pointer" />
                         </div>
                         <div className="flex border-muted border-[1px] rounded-lg">
+                            <div className={`${!History && Category === "all" ? "bg-primary-15 text-white" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-tr-[7px] rounded-br-[7px] pe-4 ps-3 pt-2.5 pb-2`} onClick={() => {
+                                getDataOrder(hotelID ?? 0)
+                            }} title="All Data">
+                                <FontAwesomeIcon icon={faRepeat} className="w-10 h-[20px]" />
+                            </div>
                             <div className={`${Category === "room" ? 'bg-primary-15 text-primary' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-tl-[7px] rounded-bl-[7px] ps-4 pe-3 pt-2.5 pb-2`} onClick={() => {
                                 getDataOrder(hotelID ?? 0, 0, "room")
                             }} title="Room Data">
@@ -317,11 +323,6 @@ export default function GuestOrderPage({ }) {
                                 getDataOrder(hotelID ?? 0, 1)
                             }} title="History Data">
                                 <FontAwesomeIcon icon={faBookOpen} className="w-10  h-[20px]" />
-                            </div>
-                            <div className={`${!History && Category === "all" ? "bg-primary-15 text-white" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-tr-[7px] rounded-br-[7px] pe-4 ps-3 pt-2.5 pb-2`} onClick={() => {
-                                getDataOrder(hotelID ?? 0)
-                            }} title="All Data">
-                                <FontAwesomeIcon icon={faRepeat} className="w-10 h-[20px]" />
                             </div>
                         </div>
                     </div>
@@ -344,12 +345,12 @@ export default function GuestOrderPage({ }) {
                 )}
                 {tab === "list" && (
                     <Card className="mt-5">
-                        <h1 className="text-h5 font-semibold">{History ? 'History' : 'List'} Order</h1>
+                        <h1 className="text-h5 font-semibold">Order {History ? 'History' : 'List'}</h1>
                         <table className="w-full mt-5">
                             <thead>
                                 <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
                                     <td className="py-3 text-start font-medium">No.</td>
-                                    <td className="py-3 text-start font-medium">Number Order</td>
+                                    <td className="py-3 text-start font-medium">Order Number</td>
                                     <td className="py-3 text-start font-medium">Guest Name</td>
                                     <td className="py-3 text-start font-medium">Status</td>
                                     <td className="py-3 text-start font-medium">Order Date</td>
