@@ -245,18 +245,18 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                         Profile
                     </a>
                 </Dropdown>
-                <Dropdown title="Hotel Services" className="border-none" icon={faEllipsisVertical} isOpen={openDropdown === 'hotel-services'}
-                    onDropdownClick={() => handleDropdownClick('hotel-services')}>
+                {/* <Dropdown title="Hotel Services" className="border-none" icon={faEllipsisVertical} isOpen={openDropdown === 'hotel-services'}
+                    onDropdownClick={() => handleDropdownClick('hotel-services')}> */}
                     {/* <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/ameneties")}>
                         Amenities
                     </a> */}
-                    <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/inroomdining")} id="menu-item-1">
+                    {/* <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/inroomdining")} id="menu-item-1">
                         Foods
-                    </a>
+                    </a> */}
                     {/* <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => router.push("/property/facilities")} id="menu-item-2">
                         Facilities
                     </a> */}
-                </Dropdown>
+                {/* </Dropdown> */}
                 {/* <div className="inline-block relative">
                     <h1 className="flex font-regular text-muted dark:bg-gray-900 bg-white dark:text-light px-4 py-1 cursor-pointer items-center rounded-3xl border-muted text-sm capitalize" onClick={() => router.push("/property/event")}>
                         Events
@@ -287,18 +287,18 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                 </div>
                 <div className="justify-center gap-10 px- h-76 mx-auto flex">
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-light">
-                        {dataProfile?.logoColor && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoColor} alt="Logo Primary" width={200} height={200} className="w-full" />}
-                        <Button className="w-full">Main Logo</Button>
+                        {dataProfile?.logoColor && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoColor} alt="Logo Primary" width={200} height={200} />}
+                        <Button className="w-full mt-1">Main Logo</Button>
                     </div>
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-dark">
-                        {dataProfile?.logoBlack && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoBlack} alt="Logo Primary" width={200} height={200} className="w-full" />}
-                        <Button className="w-full" theme="light">
+                        {dataProfile?.logoBlack && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoBlack} alt="Logo Primary" width={200} height={200} />}
+                        <Button className="w-full mt-1" theme="light">
                             Logo Dark
                         </Button>
                     </div>
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-light">
-                        {dataProfile?.logoWhite && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoWhite} alt="Logo Primary" width={200} height={200} className="w-full" />}
-                        <Button className="w-full" theme="dark">
+                        {dataProfile?.logoWhite && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoWhite} alt="Logo Primary" width={200} height={200}  />}
+                        <Button className="w-full mt-1" theme="dark">
                             Logo Light
                         </Button>
                     </div>

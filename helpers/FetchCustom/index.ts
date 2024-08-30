@@ -6,15 +6,16 @@ interface FetchResult<T> {
 }
 
 const fetchCustom = async <T>(url: string, token?: string): Promise<FetchResult<T>> => {
+  if (token == null || token.length === 0) {
+    return { error: 'token is empty' };
+  }
+
   try {
     const headers: HeadersInit = {
       "Content-Type": "application/json",
     };
 
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
+    headers["Authorization"] = `Bearer ${token}`;
     const response = await fetch(url, { headers });
 
     if (!response.ok) {

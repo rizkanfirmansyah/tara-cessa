@@ -37,6 +37,8 @@ export default function GuestOrderPage({ }) {
     const itemsPerPage = 15;
     let idLastOrder = 0;
 
+    // const dataFiltered = dataOrder.filter(v => v.)
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = dataOrder && dataOrder.slice(indexOfFirstItem, indexOfLastItem);
@@ -219,6 +221,16 @@ export default function GuestOrderPage({ }) {
         return "white";
     };
 
+    const getTextColor = (order: OrderType): string => {
+        if (order.paid === 1) return "light";
+        if (order.arrived === 1) return "light";
+        if (order.delivery === 1) return "dark dark:text-light";
+        if (order.preparing === 1) return "light";
+        if (order.verified === 1) return "dark dark:text-light";
+
+        return "dark dark:text-light";
+    };
+
     const getTimeDate = (timestamp: string) => {
         const dateObject = new Date(timestamp);
         const formattedDate = dateObject.toISOString().slice(0, 16).replace('T', ' ');
@@ -383,7 +395,7 @@ export default function GuestOrderPage({ }) {
                                         <td className="py-3 text-start font-medium text-sm ">{getTimeDate(value.orderDate)}</td>
                                         <td className="py-3 text-start font-medium text-sm ">
                                             <button
-                                                className={`bg-${getColor(value)} text-${getColor(value) == 'white' ? 'dark' : 'white'} hover:bg-primary-15' transition-all duration-300 cursor-pointer rounded pe-4 ps-3 pt-2.5 pb-2`}
+                                                className={`bg-${getColor(value)} text-${getTextColor(value)} hover:bg-primary-15' transition-all duration-300 cursor-pointer rounded pe-4 ps-3 pt-2.5 pb-2`}
                                                 onClick={() => {
                                                     handleChangeStatus(value);
                                                 }}

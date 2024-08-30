@@ -2,12 +2,12 @@
 import { useAuth } from "@/app/AuthProvider";
 import { logoBlack, logoWhite } from "@/components/atoms/Images";
 import { useSessionUser } from "@/components/store/userStore";
-import { faBoxArchive, faDoorOpen, faHotel, faMessage, faShop, faSquareCaretLeft, faSquarePollVertical, faUsers, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
+import { faBoxArchive, faDoorOpen, faHotel, faMessage, faShop, faSquareCaretLeft, faSquarePollVertical, faUsers, faPersonShelter, faRestroom, faBowlFood } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function Sidebar() {
     const router = useRouter();
@@ -16,7 +16,7 @@ export default function Sidebar() {
     const idPath = pathName.split("/").slice(0, 2).join("/");
     const user = useSessionUser((state) => state.user);
     const { logout } = useAuth();
-    const menuData = [
+    const menuData = useMemo(() => ([
         {
             text: "Main Menu",
             access: user.role.canManageData || 0,
@@ -32,6 +32,12 @@ export default function Sidebar() {
             icon: faBoxArchive,
             access: user.role.canManageHotels || 0,
             text: "Property",
+        },
+        {
+            path: "/inroomdining",
+            icon: faBowlFood,
+            access: user.role.canManageHotels || 0,
+            text: "Foods",
         },
         {
             path: "/room_management",
@@ -91,7 +97,7 @@ export default function Sidebar() {
         //     access: user.role.canManageDevices || 0,
         //     text: 'Configuration',
         // },
-    ];
+    ]), [user.role]);
 
     useEffect(() => {
         // if (idPath == "/" && user.role.canManageData == 0) {
@@ -123,34 +129,28 @@ export default function Sidebar() {
 
     return (
         <aside className={`dark:bg-gray-900 transition-all duration-500 bg-white flex flex-col min-h-screen col-span-2 border-r-[1px] border-light dark:border-gray-700 no-print`}>
-            {/* <div className="flex justify-between items-center desktop-lg:px-12 desktop-xl:px-16 desktop-2xl:px-20 py-[14px]"> */}
             <div className="p-5">
-                <h1 className="text-subtitle font-semibold text-dark ps-3 dark:text-light">
-                    {/* {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
-                    {currentTheme !== "dark" && <Image src={logoBlack} width={250} height={100} alt="logo" />} */}
-                    <h1 className="uppercase text-center text-h4 text-dark dark:text-white">Thara Canggu</h1>
-                </h1>
+                <h1 className="uppercase text-center font-semibold text-h4 text-dark dark:text-light">Thara Canggu</h1>
             </div>
 
             {user && (
                 <div className="overflow-y-auto flex-grow">
-                    <ul className="pl-6 pr-4 py-[14px]">
-                        {menuData.map((menuItem) => {
-                            if (menuItem.access === 1) {
-                                return menuItem.path ? (
-                                    <li key={menuItem.path} className={`${idPath === menuItem.path ? "text-dark bg-light" : "text-muted"} rounded-lg hover:bg-light text-body font-medium`}>
-                                        <div className="cursor-pointer flex my-2 py-3 ps-2 items-center" onClick={() => router.push(menuItem.path)}>
-                                            <FontAwesomeIcon icon={menuItem.icon} className="w-4 font-medium mx-2" />
-                                            <span className="ps-1 capitalize">{menuItem.text}</span>
-                                        </div>
-                                    </li>
-                                ) : (
+                    {}<ul className="pl-6 pr-4 py-[14px]">
+                        {menuData.filter(v => v.access === 1).map((menuItem) => {
+                            return menuItem.path ? (
+                                <li key={menuItem.path} className={`${idPath === menuItem.path ? "text-dark bg-light" : "text-muted"} rounded-lg hover:bg-light text-body font-medium`}>
+                                    <div className="cursor-pointer flex my-2 py-3 ps-2 items-center" onClick={() => router.push(menuItem.path)}>
+                                        <FontAwesomeIcon icon={menuItem.icon} className="w-4 font-medium mx-2" />
+                                        <span className="ps-1 capitalize">{menuItem.text}</span>
+                                    </div>
+                                </li>
+                            ) : (
+                                <li key={menuItem.text}>
                                     <span className="text-sm text-semimuted" key={menuItem.text}>
                                         {menuItem.text}
                                     </span>
-                                );
-                            }
-                            return null;
+                                </li>
+                            );
                         })}
                     </ul>
                 </div>

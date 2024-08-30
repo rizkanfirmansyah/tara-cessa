@@ -22,110 +22,112 @@ export default function DashboardPage() {
     const updateDataRoom = useRoomStore((state) => state.updateData);
     const dataFoods = useFoodStore((state) => state.data);
     const updateDataFood = useFoodStore((state) => state.updateData);
-    let user = userSession;
-    let bearerToken = user?.token ?? "";
+    const user = userSession;
+    const bearerToken = user?.token ?? "";
 
     useEffect(() => {
-        getDataHotel();
-        getDataRoom();
-        getDataTable();
-        getDataPoolTable();
-        getDataFoods();
-    }, []);
-
-    function getDataHotel() {
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels`;
-        if (user.hotelID) {
-            url = `${process.env.NEXT_PUBLIC_URL}/hotels/${user.hotelID}`;
+        if (bearerToken.length === 0) {
+            return;
         }
-        if (dataHotels) {
-            fetchCustom<any>(url, bearerToken)
+
+        function getDataHotel() {
+            let url = `${process.env.NEXT_PUBLIC_URL}/hotels`;
+            if (user.hotelID) {
+                url = `${process.env.NEXT_PUBLIC_URL}/hotels/${user.hotelID}`;
+            }
+            if (dataHotels) {
+                fetchCustom<any>(url, bearerToken)
+                    .then((result) => {
+                        if (result.error) {
+                            throw new Error("500 Server Error");
+                        } else {
+                            updateDataHotel(result.data.data);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching data:", error);
+                    });
+            }
+        };
+    
+        function getDataRoom() {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/manage/hotels/${hotelID}/rooms`, bearerToken)
                 .then((result) => {
                     if (result.error) {
-                        throw new Error("500 Server Error");
+                        throw new Error(result.data.message);
                     } else {
-                        updateDataHotel(result.data.data);
+                        const res = result.data.data;
+                        updateDataRoom(res);
+                    }
+                })
+                .catch((error) => {
+                    // Alert({
+                    //     title: 'Warning',
+                    //     desc: error,
+                    //     icon: 'warning'
+                    // });
+                });
+        };
+    
+        function getDataTable() {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/tables`, bearerToken)
+                .then((result) => {
+                    if (result.error) {
+                        throw new Error(result.data.message);
+                    } else {
+                        const res = result.data.data;
+                        updateDataLounge(res);
+                    }
+                })
+                .catch((error) => {
+                    // Alert({
+                    //     title: 'Warning',
+                    //     desc: error,
+                    //     icon: 'warning'
+                    // });
+                });
+        };
+    
+        function getDataPoolTable() {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/pool-tables`, bearerToken)
+                .then((result) => {
+                    if (result.error) {
+                        throw new Error(result.data.message);
+                    } else {
+                        const res = result.data.data;
+                        updateDataPoolTables(res);
+                    }
+                })
+                .catch((error) => {
+                    // Alert({
+                    //     title: 'Warning',
+                    //     desc: error,
+                    //     icon: 'warning'
+                    // });
+                });
+        };
+    
+    
+        const getDataFoods = () => {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods`, bearerToken)
+                .then((result) => {
+                    if (result.error) {
+                        throw new Error("Error fteching");
+                    } else {
+                        updateDataFood(result.data.data);
                     }
                 })
                 .catch((error) => {
                     console.error("Error fetching data:", error);
                 });
-        }
-    };
+        };
 
-    function getDataRoom() {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/manage/hotels/${hotelID}/rooms`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(result.data.message);
-                } else {
-                    const res = result.data.data;
-                    updateDataRoom(res);
-                }
-            })
-            .catch((error) => {
-                // Alert({
-                //     title: 'Warning',
-                //     desc: error,
-                //     icon: 'warning'
-                // });
-            });
-    };
-
-    function getDataTable() {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/tables`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(result.data.message);
-                } else {
-                    const res = result.data.data;
-                    updateDataLounge(res);
-                }
-            })
-            .catch((error) => {
-                // Alert({
-                //     title: 'Warning',
-                //     desc: error,
-                //     icon: 'warning'
-                // });
-            });
-    };
-
-    function getDataPoolTable() {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/pool-tables`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(result.data.message);
-                } else {
-                    const res = result.data.data;
-                    updateDataPoolTables(res);
-                }
-            })
-            .catch((error) => {
-                // Alert({
-                //     title: 'Warning',
-                //     desc: error,
-                //     icon: 'warning'
-                // });
-            });
-    };
-
-
-    const getDataFoods = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error("Error fteching");
-                } else {
-                    updateDataFood(result.data.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    };
-
-
+        getDataHotel();
+        getDataRoom();
+        getDataTable();
+        getDataPoolTable();
+        getDataFoods();
+    }, [bearerToken]);
 
     return (
         <div>
