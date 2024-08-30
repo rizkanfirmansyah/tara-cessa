@@ -4,16 +4,16 @@ import { Button, Card, CardFood, InputBox } from "@/components";
 import { imageFood, imageFood2, imageFood3, imageFood4 } from "@/components/atoms/Images";
 import { useOrderStore } from "@/components/store/guestOrderStore";
 import { useHotelStore } from "@/components/store/hotelStore";
-import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import FormatPrice from "@/helpers/FormatPrice";
 import { userSession } from "@/helpers/UserData";
 import { OrderType } from "@/types";
 import { faBookOpen, faCheckCircle, faDoorOpen, faList, faPersonShelter, faRepeat, faRestroom, faSearch, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import './style.css';
+import { Alert } from "@/helpers/Alert";
 
 export default function GuestOrderPage({ }) {
     const [tab, setTab] = useState("list");
@@ -35,6 +35,7 @@ export default function GuestOrderPage({ }) {
     let bearerToken = user?.token ?? "";
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
+    let idLastOrder = 0;
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -66,10 +67,11 @@ export default function GuestOrderPage({ }) {
                     setHistory(history);
                     setCategory(category);
 
-                    // if (history && dataOrder && dataOrder?.length < res?.length) {
-                    //     Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru !' });
-                    // }
-
+                    let idOrderLast = res[res?.length - 1]?.id;
+                    if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
+                        Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
+                        idLastOrder = idOrderLast;
+                    }
                     updateData(res);
                     setdataOrder(res);
                 }
@@ -282,11 +284,16 @@ export default function GuestOrderPage({ }) {
         }
     };
 
+
     useEffect(() => {
+        setInterval(() => {
+            getDataOrder(hotelID ?? 0)
+        }, 2000);
         updateTitle("Order");
         return () => {
             updateTitle("Dashboard");
         };
+
     }, [updateTitle]);
 
     return (

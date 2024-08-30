@@ -287,17 +287,17 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                 </div>
                 <div className="justify-center gap-10 px- h-76 mx-auto flex">
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-light">
-                        {dataProfile?.logoColor && <Image src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoColor} alt="Logo Primary" width={200} height={200} className="w-full" />}
+                        {dataProfile?.logoColor && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoColor} alt="Logo Primary" width={200} height={200} className="w-full" />}
                         <Button className="w-full">Main Logo</Button>
                     </div>
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-dark">
-                        {dataProfile?.logoBlack && <Image src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoBlack} alt="Logo Primary" width={200} height={200} className="w-full" />}
+                        {dataProfile?.logoBlack && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoBlack} alt="Logo Primary" width={200} height={200} className="w-full" />}
                         <Button className="w-full" theme="light">
                             Logo Dark
                         </Button>
                     </div>
                     <div className="p-2 border-semidark h-full rounded border-[0.5px] flex items-end flex-col justify-between bg-light">
-                        {dataProfile?.logoWhite && <Image src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoWhite} alt="Logo Primary" width={200} height={200} className="w-full" />}
+                        {dataProfile?.logoWhite && <img src={process.env.NEXT_PUBLIC_URL + "/files/" + dataProfile.logoWhite} alt="Logo Primary" width={200} height={200} className="w-full" />}
                         <Button className="w-full" theme="dark">
                             Logo Light
                         </Button>
