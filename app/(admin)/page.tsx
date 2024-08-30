@@ -1,17 +1,14 @@
 'use client'
-import { Card, CardChart, Dropdown, EventRow, LoungeRow, RoomRow } from "@/components";
-import { useEventStore } from "@/components/store/eventStore";
+import { Card, CardChart, LoungeRow, RoomRow } from "@/components";
 import { useFoodStore } from "@/components/store/foodStore";
 import { useHotelStore } from "@/components/store/hotelStore";
 import { useLoungeStore } from "@/components/store/loungeStore";
 import { usePoolStore } from "@/components/store/poolStore";
 import { useRoomStore } from "@/components/store/roomStore";
-import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import { hotelID, userSession } from "@/helpers/UserData";
-import { EventType } from "@/types";
 import { LoungeType, RoomManageType } from "@/types/RoomType";
-import { faBellConcierge, faBuilding, faDoorClosed, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
+import { faBellConcierge, faDoorClosed, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
@@ -70,11 +67,11 @@ export default function DashboardPage() {
                 }
             })
             .catch((error) => {
-                Alert({
-                    title: 'Warning',
-                    desc: error,
-                    icon: 'warning'
-                });
+                // Alert({
+                //     title: 'Warning',
+                //     desc: error,
+                //     icon: 'warning'
+                // });
             });
     };
 
@@ -89,11 +86,11 @@ export default function DashboardPage() {
                 }
             })
             .catch((error) => {
-                Alert({
-                    title: 'Warning',
-                    desc: error,
-                    icon: 'warning'
-                });
+                // Alert({
+                //     title: 'Warning',
+                //     desc: error,
+                //     icon: 'warning'
+                // });
             });
     };
 
