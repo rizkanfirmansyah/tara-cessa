@@ -12,9 +12,6 @@ import { faBellConcierge, faDoorClosed, faPersonShelter, faRestroom } from "@for
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
-    const [event, setEvent] = useState("today");
-    const [feedback, setFeedback] = useState("today");
-
     const dataHotels = useHotelStore((state) => state.data);
     const updateDataHotel = useHotelStore((state) => state.updateData);
     const dataRooms = useRoomStore((state) => state.data);
