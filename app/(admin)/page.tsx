@@ -144,12 +144,12 @@ export default function DashboardPage() {
             </div>
             <div className="grid grid-cols-4 gap-4 mt-6">
                 <Card className="col-span-2">
-                    <div className="grid">
+                    <div className="grid h-[500px]">
                         <div className="header flex justify-between">
-                            <h1 className="text-h5 font-semibold text-dark dark:text-light">List Room</h1>
+                            <h1 className="text-h5 font-semibold text-dark dark:text-light">Room List</h1>
                         </div>
 
-                        <div id="body" className="w-full mt-4">
+                        <div id="body" className="w-full mt-4 overflow-y-scroll ">
                             <table className="w-full">
                                 <thead>
                                     <tr className="ext-start border-b-[1px] text-muted dark:text-light border-light">
@@ -173,13 +173,13 @@ export default function DashboardPage() {
                     </div>
                 </Card>
                 <Card className="col-span-2">
-                    <div className="grid">
+                    <div className="grid  ">
                         <div className="header flex justify-between">
-                            <h1 className="text-h5 font-semibold text-dark dark:text-light">List Table</h1>
+                            <h1 className="text-h5 font-semibold text-dark dark:text-light">Table List</h1>
                         </div>
 
                         <div id="body" className="w-full mt-4">
-                            <table className="w-full">
+                            <table className="w-full overflow-y-scroll ">
                                 <thead>
                                     <tr className="ext-start border-b-[1px] text-muted dark:text-light border-light">
                                         <td className="py-3 text-start font-medium">No</td>
