@@ -70,8 +70,8 @@ export default function GuestOrderPage({ }) {
                     let idOrderLast = res[res?.length - 1]?.id;
                     if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
                         Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
-                        idLastOrder = idOrderLast;
                     }
+                    idLastOrder = idOrderLast;
                     updateData(res);
                     setdataOrder(res);
                 }
