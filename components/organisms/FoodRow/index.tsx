@@ -22,13 +22,13 @@ const FoodRow = ({ index, food, onClick, onEdit, onDelete }: FoodRowProps) => {
                 <Image priority src={`${process.env.NEXT_PUBLIC_URL}/files/${food.img}`} alt={`Image ${food.name}`} className="mr-2 w-12 object-cover" width={100} height={100} />
                 <div>
                     <p>{food.name}</p>
-                    <span className="text-sm hover:text-light">{food.description} scrambled / poached / fried; baked beans | mushrooms | broccoli beef sausage & bacon | hashbrown baked sourdough</span>
+                    <span className="text-sm hover:text-light">{food.description} </span>
                 </div>
             </td>
             <td className="py-2 w-1/12">{FormatPrice(food.price)}</td>
             <td className="py-2 w-1/12 ">{food.stock}</td>
             <td className="py-2 w-1/12 ">{food.availability ? "ada" : "tidak"}</td>
-            <td className="py-2 space-x-2 w-1/12">
+            <td className="py-2 w-2/12">
                 <Button theme="warning" onClick={onEdit}>
                     <FontAwesomeIcon icon={faEdit} />
                 </Button>

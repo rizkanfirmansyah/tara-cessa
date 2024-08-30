@@ -9,7 +9,7 @@ import fetchCustom from "@/helpers/FetchCustom";
 import { hotelID, userSession } from "@/helpers/UserData";
 import { LoungeType, RoomManageType } from "@/types/RoomType";
 import { faBellConcierge, faDoorClosed, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function DashboardPage() {
     const dataHotels = useHotelStore((state) => state.data);
