@@ -50,23 +50,22 @@ export default function LoginPage() {
         const credentials = `${email}:${password}`;
         const base64Credentials = btoa(credentials);
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Basic ${base64Credentials}`,
-            },
-            body: JSON.stringify({}),
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-            Alert({ title: "Login Successfully, redirect to dashboard" });
-            login(data.data.token, data.data);
-            if (data.data.hotelId) {
-                setHotelID(data.data.hotelId);
-            }
-            setTimeout(() => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Basic ${base64Credentials}`,
+                },
+                body: JSON.stringify({}),
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                login(data.data.token, data.data);
+                if (data.data.hotelId) {
+                    setHotelID(data.data.hotelId);
+                }
                 if (data.data.role.canManageData > 0) {
                     router.replace('/');
                 }
@@ -82,9 +81,11 @@ export default function LoginPage() {
                 if (data.data.role.frontdesk) {
                     router.replace("/");
                 }
-            }, 1500);
-        } else {
-            Alert({ icon: "error", title: data.message });
+            } else {
+                Alert({ icon: "error", title: data.message });
+            }
+        } catch (err) {
+            Alert({ icon: "error", title: "Cannot login. Please check your internet connection, user or password." });
         }
 
         setIsLoading(false);
