@@ -429,7 +429,7 @@ export default function InRoomDiningPage() {
         <div className="grid gap-6">
             <Card className="col-span-2">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-h5 font-semibold">List Food</h1>
+                    <h1 className="text-h5 font-semibold">Food List</h1>
                     {/* <Dropdown
                         title={
                             Category > 0

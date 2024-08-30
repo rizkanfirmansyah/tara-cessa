@@ -40,6 +40,13 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
     const updateDataProfile = useHotelStore((state) => state.updateDataProfile);
 
     useEffect(() => {
+        loadProfile();
+        loadHotel();
+
+    }, []);
+
+    useEffect(() => {
+
         setFormValue("property", dataHotel?.name);
         setFormValue("branch", dataHotel?.branch);
         setFormValue("city", dataHotel?.city);
@@ -48,11 +55,9 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
         setFormValue("defaultLink", dataHotel?.defaultLink);
         setFormValue("defaultGreeting", dataHotel?.defaultGreeting);
         setFormValue("apiKey", dataHotel?.apiKey, "textarea");
-    }, [dataHotel, dataHotel?.apiKey, dataHotel?.branch, dataHotel?.city, dataHotel?.defaultLink, dataHotel?.name, dataHotel?.province, dataHotel?.state]);
-
-    useEffect(() => {
-        loadProfile();
-    }, [hotelID]);
+        setFormValue("color", dataProfile?.primaryColor);
+        setFormValue("description", dataProfile?.description);
+    }, [dataHotel?.apiKey, dataHotel?.branch, dataHotel?.city, dataHotel?.defaultGreeting, dataHotel?.defaultLink, dataHotel?.name, dataHotel?.province, dataHotel?.state, dataProfile?.description, dataProfile?.primaryColor]);
 
     const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -233,7 +238,10 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                     <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setModalProperty(modalProperty ? false : true)} >
                         Property
                     </a>
-                    <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => setModalProfile(modalProfile ? false : true)} id="menu-item-1">
+                    <a href="#" className="dark:hover:text-dark hover:bg-light block px-4 py-2 text-sm" role="menuitem" onClick={() => {
+                        setModalProfile(modalProfile ? false : true);
+                        loadProfile();
+                    }} id="menu-item-1">
                         Profile
                     </a>
                 </Dropdown>
@@ -334,11 +342,12 @@ export default function PropertyDetail({ className, data }: PropertyDetailProps)
                     label={"Description"}
                     type={"text"}
                     name="description"
+                    value={dataProfile?.description}
                 />
                 <InputColor
                     label={"Primary Color"}
                     name="color"
-                    value={color}
+                    value={dataProfile?.primaryColor}
                     onChange={(e) => {
                         setColor(e.target.value);
                     }}
