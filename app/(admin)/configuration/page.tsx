@@ -13,8 +13,8 @@ const dataUsers: RoleType[] = [
         canManageDevices: 0,
         canManageHotels: 0,
         canManageUser: 0,
-        frontdesk: 1
-
+        frontdesk: 1,
+        order: 0,
     },
     {
         id: 2,
@@ -23,7 +23,8 @@ const dataUsers: RoleType[] = [
         canManageDevices: 1,
         canManageHotels: 0,
         canManageUser: 0,
-        frontdesk: 1
+        frontdesk: 1,
+        order: 0,
     },
 ];
 

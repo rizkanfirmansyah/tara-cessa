@@ -29,6 +29,7 @@ interface RoleStoreType {
 const INITIAL_STATE: State = {
   user: {
     id: 0,
+    hotelId: 0,
     email: "",
     name: "",
     roleId: 0,
@@ -42,6 +43,7 @@ const INITIAL_STATE: State = {
       frontdesk: 0,
       createdAt: "",
       updatedAt: "",
+      order: 0,
     },
     token: "",
     createdAt: "",
