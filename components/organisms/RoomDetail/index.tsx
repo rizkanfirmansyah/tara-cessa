@@ -121,11 +121,11 @@ export default function RoomDetail() {
 
         const formData = new FormData(event.currentTarget);
         const no = formData.get("no") as string;
-        const macAddr = formData.get("macAddr") as string;
+        const guestName = formData.get("guestName") as string;
         const wifiSsid = formData.get("wifiSsid") as string;
         const wifiPassword = formData.get("wifiPassword") as string;
 
-        const dataRoom = JSON.stringify({ no, macAddr, wifiSsid, wifiPassword });
+        const dataRoom = JSON.stringify({ no, guestName, wifiSsid, wifiPassword });
 
         let url = `${process.env.NEXT_PUBLIC_URL}/manage/hotels/${hotelID}/rooms`;
         if (detailRoomID > 0) {
@@ -282,17 +282,13 @@ export default function RoomDetail() {
                     type={"text"}
                     name="no"
                 />
-                <InputGroup theme="horizontal" label={"Mac Address"} type={"text"} name="macAddr" />
-                <InputGroup theme="horizontal" label={"WiFi SSID"} type={"text"} name="wifiSsid" />
-                <InputGroup theme="horizontal" label={"WiFi Password"} type={"text"} name="wifiPassword" />
+                <InputGroup theme="horizontal" label={"Guest Name"} type={"text"} name="guestName" />
             </Modal>
 
             <Modal title={`Room: ${dataRoomDetail?.no}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
                 setDetailRoomID(dataRoomDetail?.id || 0)
                 setFormValue("no", dataRoomDetail?.no)
-                setFormValue("macAddr", dataRoomDetail?.macAddr)
-                setFormValue("wifiSsid", dataRoomDetail?.wifiSsid)
-                setFormValue("wifiPassword", dataRoomDetail?.wifiPassword)
+                setFormValue("guestName", dataRoomDetail?.guestName)
                 setModalRoom(true);
                 setModal(false);
             }}>
@@ -303,13 +299,8 @@ export default function RoomDetail() {
                             <h5 className="dark:text-white">{dataRoomDetail?.guestName}</h5>
                         </div>
                         <div className="space-y-1">
-                            <p className="text-gray-400">WIFI SSID</p>
-                            <h5 className="dark:text-white">{dataRoomDetail?.wifiSsid}</h5>
-                        </div>
-
-                        <div className="space-y-1">
-                            <p className="text-gray-400">WIFI PASSWORD</p>
-                            <h5 className="dark:text-white">{dataRoomDetail?.wifiPassword}</h5>
+                            <p className="text-gray-400">Room Number</p>
+                            <h5 className="dark:text-white">{dataRoomDetail?.no}</h5>
                         </div>
                     </div>
                     <div>

@@ -93,11 +93,11 @@ export default function PoolTableDetail() {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        const tableName = formData.get("tableName") as string;
-        const tableNo = formData.get("tableNo") as string;
+        const poolTableName = formData.get("poolTableName") as string;
+        const poolTableNo = formData.get("poolTableNo") as string;
         const location = formData.get("location") as string;
 
-        const dataRoom = JSON.stringify({ tableName, tableNo, location });
+        const dataRoom = JSON.stringify({ poolTableName, poolTableNo, location });
 
         let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/pool-tables`;
         if (detailRoomID > 0) {
@@ -222,7 +222,7 @@ export default function PoolTableDetail() {
         <>
             <Card>
                 <div className="flex justify-between items-center">
-                    <h1 className="text-h5 font-semibold">List Table (Lounge)</h1>
+                    <h1 className="text-h5 font-semibold">Table List(Pool)</h1>
                     <div className="flex ml-10 mr-2 space-x-3">
                         <Button theme="primary" onClick={() => setModalRoom(modalRoom ? false : true)}>
                             <FontAwesomeIcon icon={faPlus} />
@@ -281,16 +281,16 @@ export default function PoolTableDetail() {
                     theme="horizontal"
                     label={"Table Name"}
                     type={"text"}
-                    name="tableName"
+                    name="poolTableName"
                 />
-                <InputGroup theme="horizontal" label={"Table No"} type={"text"} name="tableNo" />
+                <InputGroup theme="horizontal" label={"Table No"} type={"text"} name="poolTableNo" />
                 <InputGroup theme="horizontal" label={"Location"} type={"text"} name="location" />
             </Modal>
 
             <Modal title={`Room: ${dataRoomDetail?.poolTableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
                 setDetailRoomID(dataRoomDetail?.id || 0)
-                setFormValue("tableName", dataRoomDetail?.poolTableName)
-                setFormValue("tableNo", dataRoomDetail?.poolTableNo)
+                setFormValue("poolTableName", dataRoomDetail?.poolTableName)
+                setFormValue("poolTableNo", dataRoomDetail?.poolTableNo)
                 setFormValue("location", dataRoomDetail?.location)
                 setModalRoom(true);
                 setModal(false);
