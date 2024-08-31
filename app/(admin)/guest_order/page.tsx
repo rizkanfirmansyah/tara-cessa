@@ -148,10 +148,10 @@ export default function GuestOrderPage({ }) {
                     let lastId = res[0]?.id;
                     if (lastId && lastId !== newOrderId && newOrderId !== 0) {
                         Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
+                        setNewOrderId(lastId);
                     }
                     updateData(res);
                     setdataOrder(res);
-                    setNewOrderId(lastId);
                 }
             })
             .catch((error) => {
@@ -185,11 +185,11 @@ export default function GuestOrderPage({ }) {
                             let lastId = res[0]?.id;
                             if (lastId && lastId !== newOrderId && newOrderId !== 0) {
                                 Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
+                                setNewOrderId(lastId);
                             }
 
                             updateData(res);
                             setdataOrder(res);
-                            setNewOrderId(lastId);
                         })
                         .catch((localError) => {
                             console.error("Error fetching local data:", localError);
