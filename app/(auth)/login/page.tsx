@@ -81,6 +81,9 @@ export default function LoginPage() {
                 if (data.data.role.frontdesk) {
                     router.replace("/");
                 }
+                if (data.data.role.order) {
+                    router.replace("/guest_order");
+                }
             } else {
                 Alert({ icon: "error", title: data.message });
             }
