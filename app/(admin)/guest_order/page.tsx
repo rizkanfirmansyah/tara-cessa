@@ -541,13 +541,22 @@ export default function GuestOrderPage({ }) {
                     <div className="border-b-[1px] border-semigray -mx-6 px-6 pb-3">
                         <h1 className="font-semibold text-subtitle">Order Detail</h1>
                     </div>
+
+                    <div className="mt-6">
+                        <div className="mb-2">{dataDetail && getTimeDate(dataDetail.orderDate)}</div>
+                        <div className="font-semibold">{dataDetail?.guestName}</div>
+                        {dataDetail?.roomNo && <div>Room -  {dataDetail.roomNo}</div>}
+                        {dataDetail?.tableNo && <div>Lounge Table - {dataDetail.tableNo}</div>}
+                        {dataDetail?.poolNo && <div>Pool Table - {dataDetail.poolNo}</div>}
+                    </div>
+
                     {dataDetail?.foodItems == null ? (
                         <div className="flex justify-center items-center h-full flex-col">
                             <FontAwesomeIcon icon={faShoppingBasket} className="text-muted text-[100px]" />
                             <h1 className="text-subtitle font-medium text-semigray mt-4">No Item Added</h1>
                         </div>
                     ) : (
-                        <div className="w-full mt-5">
+                        <div className="w-full mt-2">
                             {dataDetail.foodItems &&
                                 dataDetail.foodItems.map((food, index: number) => (
                                     <div key={index + 1} className={`flex justify-between items-center border-b-[1px] border-semigray py-6 ${index === dataDetail.foodItems.length - 1 ? "border-dashed mb-10" : ""}`}>
@@ -564,6 +573,11 @@ export default function GuestOrderPage({ }) {
                                     <div className="flex items-center justify-between font-semibold">
                                         <p>Total</p>
                                         <p>{FormatPrice(subHarga)}</p>
+                                    </div>
+
+                                    <div className="flex items-center justify-between mt-2">
+                                        <p>Charge In</p>
+                                        <p className="capitalize">{dataDetail.paymentMethod}</p>
                                     </div>
                                 </div>
                             )}

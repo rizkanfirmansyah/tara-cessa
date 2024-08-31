@@ -269,7 +269,7 @@ export default function LoungeDetail() {
                 </div>
             )}
 
-            <Modal title={`${detailRoomID > 0 ? "Update Room" : "Insert Room"}`} show={modalRoom} onClosed={() => {
+            <Modal title={`${detailRoomID > 0 ? "Update Table" : "Insert Table"}`} show={modalRoom} onClosed={() => {
                 setFormEmpty();
                 setDetailRoomID(0);
                 setModalRoom(false);
@@ -285,7 +285,7 @@ export default function LoungeDetail() {
                 <InputGroup theme="horizontal" label={"Location"} type={"text"} name="location" />
             </Modal>
 
-            <Modal title={`Room: ${dataRoomDetail?.tableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
+            <Modal title={`Table: ${dataRoomDetail?.tableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
                 setDetailRoomID(dataRoomDetail?.id || 0)
                 setFormValue("tableName", dataRoomDetail?.tableName)
                 setFormValue("tableNo", dataRoomDetail?.tableNo)

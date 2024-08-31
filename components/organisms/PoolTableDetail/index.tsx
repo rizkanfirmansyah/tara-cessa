@@ -222,7 +222,7 @@ export default function PoolTableDetail() {
         <>
             <Card>
                 <div className="flex justify-between items-center">
-                    <h1 className="text-h5 font-semibold">Table List(Pool)</h1>
+                    <h1 className="text-h5 font-semibold">Table List (Pool)</h1>
                     <div className="flex ml-10 mr-2 space-x-3">
                         <Button theme="primary" onClick={() => setModalRoom(modalRoom ? false : true)}>
                             <FontAwesomeIcon icon={faPlus} />
@@ -271,7 +271,7 @@ export default function PoolTableDetail() {
                 </div>
             )}
 
-            <Modal title={`${detailRoomID > 0 ? "Update Room" : "Insert Room"}`} show={modalRoom} onClosed={() => {
+            <Modal title={`${detailRoomID > 0 ? "Update Table" : "Insert Table"}`} show={modalRoom} onClosed={() => {
                 setFormEmpty();
                 setDetailRoomID(0);
                 setModalRoom(false);
@@ -287,7 +287,7 @@ export default function PoolTableDetail() {
                 <InputGroup theme="horizontal" label={"Location"} type={"text"} name="location" />
             </Modal>
 
-            <Modal title={`Room: ${dataRoomDetail?.poolTableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
+            <Modal title={`Table: ${dataRoomDetail?.poolTableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
                 setDetailRoomID(dataRoomDetail?.id || 0)
                 setFormValue("poolTableName", dataRoomDetail?.poolTableName)
                 setFormValue("poolTableNo", dataRoomDetail?.poolTableNo)
