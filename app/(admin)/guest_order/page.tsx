@@ -81,6 +81,7 @@ export default function GuestOrderPage({ }) {
     const [dataOrder, setdataOrder] = useState<OrderType[] | []>([]);
     const [filterStatus, setFilterStatus] = useState<Status[]>(['Verified', 'Preparing', 'In Order']);
     const [filterSource, setFilterSource] = useState<OrderSource>('all');
+    const [newOrderId, setNewOrderId] = useState(0)
     const { updateTitle } = useContext(MetaContext);
     const datas = useOrderStore((state) => state.data);
     // const dataDetail = useOrderStore((state) => state.dataDetail);
@@ -92,7 +93,6 @@ export default function GuestOrderPage({ }) {
     let bearerToken = user?.token ?? "";
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-    let idLastOrder = 0;
 
     const dataFiltered = dataOrder.filter(v => {
         const status = filterStatus.length === 0 || filterStatus.indexOf(getStatus(v)) >= 0;
@@ -145,16 +145,13 @@ export default function GuestOrderPage({ }) {
                     setHistory(History);
                     setCategory(category);
 
-                    let idOrderLast = res[0]?.id;
-                    console.log(idLastOrder);
-                    console.log(idOrderLast);
-
-                    if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
+                    let lastId = res[0]?.id;
+                    if (lastId && lastId !== newOrderId && newOrderId !== 0) {
                         Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
                     }
                     updateData(res);
                     setdataOrder(res);
-                    idLastOrder = idOrderLast;
+                    setNewOrderId(lastId);
                 }
             })
             .catch((error) => {
@@ -185,17 +182,14 @@ export default function GuestOrderPage({ }) {
                             setCategory(category);
                             setHistory(history);
 
-                            let idOrderLast = res[0]?.id;
-                            console.log(idLastOrder);
-                            console.log(idOrderLast);
-
-                            if (idOrderLast && idOrderLast !== idLastOrder && idLastOrder !== 0) {
+                            let lastId = res[0]?.id;
+                            if (lastId && lastId !== newOrderId && newOrderId !== 0) {
                                 Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
                             }
 
                             updateData(res);
                             setdataOrder(res);
-                            idLastOrder = idOrderLast;
+                            setNewOrderId(lastId);
                         })
                         .catch((localError) => {
                             console.error("Error fetching local data:", localError);
@@ -321,7 +315,6 @@ export default function GuestOrderPage({ }) {
 
 
     useEffect(() => {
-
         updateTitle("Order");
         return () => {
             updateTitle("Dashboard");
@@ -336,7 +329,7 @@ export default function GuestOrderPage({ }) {
         }, 2000);
 
         return () => clearInterval(intervalId);
-    }, [hotelID, History, Category]);
+    }, [hotelID, History, Category, newOrderId]);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -458,11 +451,15 @@ export default function GuestOrderPage({ }) {
                                 {currentItems?.map((value, index) => (
                                     <tr className="text-start border-b-[1px] text-dark dark:text-light border-light" key={"order" + index + value.id}>
                                         <td className="py-3 text-start font-medium text-sm ">{index + 1 + indexOfFirstItem}</td>
-                                        <td className="py-3 text-start font-medium text-sm ">
+                                        <td className="py-3 text-start font-medium text-sm flex gap-2 items-center">
                                             {value.roomNo && `Room -  ${value.roomNo}`}
                                             {value.tableNo && `Lounge Table - ${value.tableNo}`}
                                             {value.poolNo && `Pool Table - ${value.poolNo}`}
-
+                                            {getStatus(value) === 'Verified' && newOrderId === value.id && (
+                                                <div className="bg-primary text-xs text-light rounded-full py-1 px-2">
+                                                    New
+                                                </div>
+                                            )}
                                         </td>
                                         <td className="py-3 text-start font-medium text-sm ">{value.guestName} </td>
                                         <td className={`py-3 text-start font-medium text-sm text-${getColor(value)}`}>{getStatus(value)}</td>
