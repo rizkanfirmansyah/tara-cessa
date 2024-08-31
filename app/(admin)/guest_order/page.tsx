@@ -58,11 +58,16 @@ const getTextColor = (order: OrderType): string => {
     return "dark dark:text-light";
 };
 
+const zeroPad = (n: number) => {
+    return n.toLocaleString('id', { minimumIntegerDigits: 2 });
+};
+
 const getTimeDate = (timestamp: string) => {
     const dateObject = new Date(timestamp);
-    const formattedDate = dateObject.toISOString().slice(0, 16).replace('T', ' ');
+    const time = `${zeroPad(dateObject.getHours())}:${zeroPad(dateObject.getMinutes())}`;
+    const date = `${dateObject.getFullYear()}-${zeroPad(dateObject.getMonth())}-${zeroPad(dateObject.getDate())}`;
 
-    return formattedDate;
+    return `${date} ${time}`;
 }
 
 export default function GuestOrderPage({ }) {
