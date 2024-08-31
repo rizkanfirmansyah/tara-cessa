@@ -14,7 +14,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import './style.css';
 import { Alert } from "@/helpers/Alert";
-
 type Status = 'Completed' | 'Paid' | 'Arrived' | 'Delivery' | 'Preparing' | 'Verified' | 'In Order';
 type OrderSource = 'all' | 'room' | 'table' | 'pooltable';
 
@@ -94,6 +93,8 @@ export default function GuestOrderPage({ }) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
+    const audioRef = useRef<HTMLAudioElement>(null);
+
     const dataFiltered = dataOrder.filter(v => {
         const status = filterStatus.length === 0 || filterStatus.indexOf(getStatus(v)) >= 0;
 
@@ -146,8 +147,15 @@ export default function GuestOrderPage({ }) {
                     setCategory(category);
 
                     let lastId = res[0]?.id;
+                    if (newOrderId === 0) {
+                        setNewOrderId(lastId);
+                    }
+
                     if (lastId && lastId !== newOrderId && newOrderId !== 0) {
                         Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
+                        if (audioRef.current != null) {
+                            audioRef.current.play();
+                        }
                         setNewOrderId(lastId);
                     }
                     updateData(res);
@@ -183,8 +191,15 @@ export default function GuestOrderPage({ }) {
                             setHistory(history);
 
                             let lastId = res[0]?.id;
+                            if (newOrderId === 0) {
+                                setNewOrderId(lastId);
+                            }
+
                             if (lastId && lastId !== newOrderId && newOrderId !== 0) {
                                 Alert({ title: 'Notification', type: 'info', desc: 'Ada pesanan baru!' });
+                                if (audioRef.current != null) {
+                                    audioRef.current.play();
+                                }
                                 setNewOrderId(lastId);
                             }
 
@@ -337,6 +352,7 @@ export default function GuestOrderPage({ }) {
 
     return (
         <div className="grid grid-cols-3 gap-5">
+            <audio ref={audioRef} src="/assets/notification-alert.mp3" />
             <div className={`${detail ? "col-span-2" : "col-span-3"} no-print`}>
                 <Card>
                     <div className="flex gap-5 items-center -my-2 -mx-2">
@@ -455,7 +471,7 @@ export default function GuestOrderPage({ }) {
                                             {value.roomNo && `Room -  ${value.roomNo}`}
                                             {value.tableNo && `Lounge Table - ${value.tableNo}`}
                                             {value.poolNo && `Pool Table - ${value.poolNo}`}
-                                            {getStatus(value) === 'Verified' && newOrderId === value.id && (
+                                            {getStatus(value) === 'Verified' && newOrderId === value.id && ((new Date(value.orderDate)).getTime() > ((new Date()).getTime() - (1000 * 60 * 5))) && (
                                                 <div className="bg-primary text-xs text-light rounded-full py-1 px-2">
                                                     New
                                                 </div>
