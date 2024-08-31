@@ -479,9 +479,9 @@ export default function InRoomDiningPage() {
                         <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
                             <td className="py-3 text-start font-medium">No.</td>
                             <td className="py-3 text-start font-medium">Food Name</td>
-                            <td className="py-3 text-start font-medium">Price</td>
-                            <td className="py-3 text-start font-medium">Stock</td>
-                            <td className="py-3 text-start font-medium">Availability</td>
+                            <td className="py-3 px-5 text-end font-medium">Price</td>
+                            <td className="py-3 px-5 text-end font-medium">Stock</td>
+                            <td className="py-3 px-10 text-center font-medium">Availability</td>
                             <td className="py-3 text-start font-medium">Action</td>
                         </tr>
                     </thead>

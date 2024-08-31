@@ -1,17 +1,15 @@
 "use client";
 import { useAuth } from "@/app/AuthProvider";
-import { logoBlack, logoWhite } from "@/components/atoms/Images";
 import { useSessionUser } from "@/components/store/userStore";
-import { faBoxArchive, faDoorOpen, faHotel, faMessage, faShop, faSquareCaretLeft, faSquarePollVertical, faUsers, faPersonShelter, faRestroom, faBowlFood } from "@fortawesome/free-solid-svg-icons";
+import { faBoxArchive, faHotel, faMessage, faShop, faSquareCaretLeft, faSquarePollVertical, faUsers, faBowlFood, faBed, faUtensils, faWaterLadder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
 export default function Sidebar() {
     const router = useRouter();
-    const { systemTheme, theme, setTheme } = useTheme();
+    const { systemTheme, theme } = useTheme();
     const pathName = usePathname();
     const idPath = pathName.split("/").slice(0, 2).join("/");
     const user = useSessionUser((state) => state.user);
@@ -41,19 +39,19 @@ export default function Sidebar() {
         },
         {
             path: "/room_management",
-            icon: faDoorOpen,
+            icon: faBed,
             access: user.role.canManageData,
             text: "Room Management",
         },
         {
             path: "/lounge_management",
-            icon: faPersonShelter,
+            icon: faUtensils,
             access: user.role.canManageData,
             text: "Lounge Management",
         },
         {
             path: "/pooltable_management",
-            icon: faRestroom,
+            icon: faWaterLadder,
             access: user.role.canManageData,
             text: "Pool Management",
         },

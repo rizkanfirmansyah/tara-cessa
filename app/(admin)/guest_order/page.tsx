@@ -1,6 +1,6 @@
 "use client";
 import { MetaContext } from "@/app/MetaProvider";
-import { Button, Card, CardFood, InputBox } from "@/components";
+import { Button, Card, CardFood } from "@/components";
 import { imageFood, imageFood2, imageFood3, imageFood4 } from "@/components/atoms/Images";
 import { useOrderStore } from "@/components/store/guestOrderStore";
 import { useHotelStore } from "@/components/store/hotelStore";
@@ -8,7 +8,7 @@ import fetchCustom from "@/helpers/FetchCustom";
 import FormatPrice from "@/helpers/FormatPrice";
 import { userSession } from "@/helpers/UserData";
 import { OrderType } from "@/types";
-import { faBed, faBookOpen, faCheckCircle, faDoorOpen, faList, faPersonShelter, faRectangleList, faRepeat, faRestroom, faSearch, faShoppingBasket, faUtensils, faWaterLadder } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faCheckCircle, faList, faShoppingBasket, faUtensils, faWaterLadder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -454,28 +454,31 @@ export default function GuestOrderPage({ }) {
                         <table className="w-full mt-5">
                             <thead>
                                 <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
-                                    <td className="py-3 text-start font-medium">No.</td>
-                                    <td className="py-3 text-start font-medium">Order Number</td>
-                                    <td className="py-3 text-start font-medium">Guest Name</td>
-                                    <td className="py-3 text-start font-medium">Status</td>
-                                    <td className="py-3 text-start font-medium">Order Date</td>
-                                    <td className="py-3 text-start font-medium">Change Status</td>
-                                    <td className="py-3 text-start font-medium">Detail</td>
+                                    <th className="py-3 text-start font-medium">No.</th>
+                                    <th className="py-3 text-start font-medium">Order Number</th>
+                                    <th className="py-3 text-start font-medium">Guest Name</th>
+                                    <th className="py-3 text-start font-medium">Status</th>
+                                    <th className="py-3 text-start font-medium">Order Date</th>
+                                    <th className="py-3 text-start font-medium">Change Status</th>
+                                    <th className="py-3 text-start font-medium">Charge In</th>
+                                    <th className="py-3 text-start font-medium">Detail</th>
                                 </tr>
                             </thead>
-                            <tbody className="">
+                            <tbody>
                                 {currentItems?.map((value, index) => (
                                     <tr className="text-start border-b-[1px] text-dark dark:text-light border-light" key={"order" + index + value.id}>
                                         <td className="py-3 text-start font-medium text-sm ">{index + 1 + indexOfFirstItem}</td>
-                                        <td className="py-3 text-start font-medium text-sm flex gap-2 items-center">
-                                            {value.roomNo && `Room -  ${value.roomNo}`}
-                                            {value.tableNo && `Lounge Table - ${value.tableNo}`}
-                                            {value.poolNo && `Pool Table - ${value.poolNo}`}
-                                            {getStatus(value) === 'Verified' && newOrderId === value.id && ((new Date(value.orderDate)).getTime() > ((new Date()).getTime() - (1000 * 60 * 5))) && (
-                                                <div className="bg-primary text-xs text-light rounded-full py-1 px-2">
-                                                    New
-                                                </div>
-                                            )}
+                                        <td className="py-3 text-start font-medium text-sm">
+                                            <div className="flex gap-2 items-center">
+                                                {value.roomNo && `Room -  ${value.roomNo}`}
+                                                {value.tableNo && `Lounge Table - ${value.tableNo}`}
+                                                {value.poolNo && `Pool Table - ${value.poolNo}`}
+                                                {getStatus(value) === 'Verified' && newOrderId === value.id && ((new Date(value.orderDate)).getTime() > ((new Date()).getTime() - (1000 * 60 * 5))) && (
+                                                    <div className="bg-primary text-xs text-light rounded-full py-1 px-2">
+                                                        New
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="py-3 text-start font-medium text-sm ">{value.guestName} </td>
                                         <td className={`py-3 text-start font-medium text-sm text-${getColor(value)}`}>{getStatus(value)}</td>
@@ -491,6 +494,7 @@ export default function GuestOrderPage({ }) {
                                                 <FontAwesomeIcon icon={faCheckCircle} />
                                             </button>
                                         </td>
+                                        <td className="py-3 text-start font-medium text-sm capitalize">{value.paymentMethod}</td>
                                         <td className="py-3 text-start font-medium text-sm text-green-600">
                                             <button
                                                 className={`hover:bg-primary-15 bg-transparent hover:text-primary text-muted hover:bg-primary-15' transition-all duration-300 cursor-pointer rounded pe-4 ps-3 pt-2.5 pb-2`}
@@ -557,17 +561,9 @@ export default function GuestOrderPage({ }) {
                                 ))}
                             {subHarga && (
                                 <div>
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-gray-300">Sub Total</p>
-                                        <p>{FormatPrice(subHarga)}</p>
-                                    </div>
-                                    <div className="flex items-center justify-between py-3">
-                                        <p className="text-gray-300">Ppn</p>
-                                        <p>{FormatPrice(PPN)}</p>
-                                    </div>
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between font-semibold">
                                         <p>Total</p>
-                                        <p>{FormatPrice(subHarga + PPN)}</p>
+                                        <p>{FormatPrice(subHarga)}</p>
                                     </div>
                                 </div>
                             )}

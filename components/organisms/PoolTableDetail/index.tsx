@@ -9,11 +9,12 @@ import setFormEmpty from "@/helpers/FormInputCustom/empty";
 import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
 import { PoolTableType } from "@/types/RoomType";
-import { faPersonShelter, faPlus, faQrcode, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faQrcode, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import '../RoomDetail/style.css';
+import { faWaterLadder } from '@fortawesome/free-solid-svg-icons/faWaterLadder';
 
 export default function PoolTableDetail() {
     const [modal, setModal] = useState(false);
@@ -27,8 +28,7 @@ export default function PoolTableDetail() {
     const updateDataDetail = usePoolStore((state) => state.updateDataDetail);
     let user = userSession;
     let bearerToken = user?.token ?? "";
-    const itemsPerPage = 20;
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const itemsPerPage = 21;
 
     useEffect(() => {
         getData();
@@ -247,7 +247,7 @@ export default function PoolTableDetail() {
                                 setModal(modal ? false : true);
                                 getDataRoom(rooms.id);
                             }}
-                            icon={faPersonShelter}
+                            icon={faWaterLadder}
                         />
                     ))}
                 </div>
@@ -319,7 +319,7 @@ export default function PoolTableDetail() {
                 </div>
 
                 <div className="flex justify-between">
-                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete Lounge</Button>
+                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete</Button>
                     <Button theme="primary" onClick={() => window.print()} >Print Data</Button>
                 </div>
             </Modal>
