@@ -1,76 +1,85 @@
 "use client";
 import { MetaContext } from "@/app/MetaProvider";
-import { Button, ButtonActions, Card, Dropdown, FoodRow, InputGroup, Modal } from "@/components";
-import { useFoodStore } from "@/components/store/foodStore";
+import { Button, ButtonActions, Card, FoodRow, InputGroup, Modal } from "@/components";
 import { useHotelStore } from "@/components/store/hotelStore";
 import fetchCustom from "@/helpers/FetchCustom";
-import setFormEmpty from "@/helpers/FormInputCustom/empty";
-import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
 import { FoodType } from "@/types";
 import { FoodAdditionalType, FoodCategoryType } from "@/types/FoodType";
 import { faEdit, faPlus, faRepeat, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
+const initialAdditional: FoodAdditionalType = {
+    foodId: 0,
+    id: 0,
+    name: '',
+    price: 0,
+};
+
+const initialCategory: FoodCategoryType = {
+    hotelId: 0,
+    id: 0,
+    img: '',
+    name: '',
+};
+
+const initialFood: FoodType = {
+    availability: false,
+    categoryId: 0,
+    description: '',
+    favorite: 0,
+    foodCategory: {
+        hotelId: 0,
+        id: 0,
+        img: '',
+        name: '',
+    },
+    id: 0,
+    img: '',
+    name: '',
+    price: 0,
+    stock: 0,
+};
+
 export default function InRoomDiningPage() {
+    const [additional, setAdditional] = useState<FoodAdditionalType>(initialAdditional);
+    const [additionals, setAdditionals] = useState<FoodAdditionalType[]>([]);
+    const [category, setCategory] = useState<FoodCategoryType | null>();
+    const [categories, setCategories] = useState<FoodCategoryType[]>([]);
+    const [food, setFood] = useState<FoodType>(initialFood);
+    const [foods, setFoods] = useState<FoodType[] | []>([]);
+    const [img, setImg] = useState<File | null>();
+    const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState('');
+    const [searchCategoryId, setSearchCategoryId] = useState(0);
+    const [showEditFood, setShowEditFood] = useState(false);
+    const [showEditCategory, setShowEditCategory] = useState(false);
+
     const { updateTitle } = useContext(MetaContext);
-    const [modalFood, setModalFood] = useState(false);
-    const [foodID, setFoodID] = useState(0);
-    const [foodCategoryID, setFoodCategoryID] = useState(0);
-    const [additionalID, setAdditionalID] = useState(0);
-    const [search, setSearch] = useState("");
-    const [Category, setCategory] = useState(0);
-    const [favorite, setFavorite] = useState(false);
-    const [availability, setAvailability] = useState(false);
-    const [newCategoryImage, setNewCategoryImage] = useState<File | null>(null);
-    const [IsLoading, setIsLoading] = useState(false);
-    const [update, setUpdate] = useState(false);
-    const [addCategory, setAddCategory] = useState(false);
-    const [newCategory, setNewCategory] = useState("");
-    const [additional, setAdditional] = useState("");
-    const [additionalPrice, setAdditionalPrice] = useState(0);
-    const [dataFoods, setDataFood] = useState<FoodType[] | []>([]);
     const hotelID = useHotelStore((state) => state.hotelID);
-    const datas = useFoodStore((state) => state.data);
-    const dataFoodsCategory = useFoodStore((state) => state.dataCategory);
-    const updateData = useFoodStore((state) => state.updateData);
-    const updateDataCategory = useFoodStore((state) => state.updateDataCategory);
-    const additionalData = useFoodStore((state) => state.additionalData);
-    const updateAdditionalData = useFoodStore((state) => state.updateAdditionalData);
+
     let user = userSession;
-    let bearerToken = user?.token ?? "";
+    let bearerToken = user?.token ?? '';
+
+    const rows = useMemo(() => {
+        return foods
+            .filter(v => search ? v.name.toLowerCase().includes(search.toLowerCase()) : true)
+            .filter(v => searchCategoryId === 0 ? true : v.categoryId === searchCategoryId);
+    }, [foods, search, searchCategoryId]);
 
     useEffect(() => {
         updateTitle("Food Page");
-        if (datas) {
-            setDataFood(datas)
-        }
         return () => {
             updateTitle("Dashboard");
         };
     }, [updateTitle]);
 
     useEffect(() => {
-        if (modalFood) {
-            getAdditionalData();
-        }
-    }, [modalFood]);
-
-    useEffect(() => {
         getDataFoods();
         getDataFoodsCategory();
     }, []);
-
-    function searchFood(searchCriteria: string) {
-        if (datas) {
-            const res: FoodType[] = datas.filter(amenety =>
-                (searchCriteria ? amenety.name.toLowerCase().includes(searchCriteria.toLowerCase()) : true)
-            );
-            setDataFood(res);
-        }
-    }
 
     const getDataFoodsCategory = () => {
         fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories`, bearerToken)
@@ -78,7 +87,7 @@ export default function InRoomDiningPage() {
                 if (result.error) {
                     throw new Error("Error fteching");
                 } else {
-                    updateDataCategory(result.data.data);
+                    setCategories(result.data.data);
                 }
             })
             .catch((error) => {
@@ -92,8 +101,7 @@ export default function InRoomDiningPage() {
                 if (result.error) {
                     throw new Error("Error fteching");
                 } else {
-                    updateData(result.data.data);
-                    setDataFood(result.data.data);
+                    setFoods(result.data.data);
                 }
             })
             .catch((error) => {
@@ -101,14 +109,13 @@ export default function InRoomDiningPage() {
             });
     };
 
-    const getAdditionalData = () => {
+    const getAdditionalData = (foodID: number) => {
         fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/food_add`, bearerToken)
             .then((result) => {
                 if (result.error) {
                     throw new Error("Error fteching");
                 } else {
-                    updateAdditionalData(result.data.data);
-                    console.log(result.data.data);
+                    setAdditionals(result.data.data);
                 }
             })
             .catch((error) => {
@@ -126,7 +133,7 @@ export default function InRoomDiningPage() {
             headers: myHeaders,
         };
 
-        setIsLoading(true);
+        setLoading(true);
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "This action cannot be undone!",
@@ -148,11 +155,10 @@ export default function InRoomDiningPage() {
                         throw new Error("500 Server Error");
                     }
                     getDataFoods();
-                    setAddCategory(false);
                 })
                 .catch((error) => console.error(error))
                 .finally(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 });
         } else {
             Swal.fire("Cancelled", "Your item is safe :)", "info");
@@ -160,63 +166,50 @@ export default function InRoomDiningPage() {
     };
 
     const handleEditFoods = (food: FoodType) => {
-        setUpdate(true);
-        setFoodID(food.id);
-        setFormValue("name", food.name);
-        setFormValue("price", food.price);
-        setFormValue("stock", food.stock);
-        setAvailability(food.availability);
-        setFavorite(food.favorite === 1);
-        setCategory(food.categoryId);
-        setFormValue("description", food.description);
+        getAdditionalData(food.id);
+        setFood(food);
+        setCategory(food.foodCategory);
+        setAdditional(initialAdditional);
+        setShowEditFood(true);
     };
 
     function clearForm() {
-        setFormEmpty();
-        setFoodID(0);
-        setUpdate(false);
+        setFood(initialFood);
+        setCategory(null);
+        setAdditional(initialAdditional);
+        setImg(null);
     }
 
     const handleInsertFood = async (event: FormEvent<HTMLFormElement>) => {
         event && event.preventDefault();
 
-        const formData = new FormData(event && event.currentTarget);
-        const name = formData.get("name") as string;
-        const description = formData.get("description") as string;
-        const stock = parseInt(formData.get("stock") as string);
-        const price = parseInt(formData.get("price") as string);
-        const category = parseInt(formData.get("category") as string);
+        const f = { ...food };
+        if (img == null) {
+            f.img = '';
+        }
+        const jsonData = JSON.stringify(f);
 
-        const image = formData.get("image") as Blob;
-
-        const jsonData = JSON.stringify({
-            name,
-            description,
-            stock,
-            price,
-            favorite: favorite ? 1 : 0,
-            availability,
-        });
-
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods/${category}`;
-        if (foodID && foodID > 0) {
-            url += "/" + foodID;
+        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods/${food.categoryId}`;
+        if (food.id > 0) {
+            url += "/" + food.id;
         }
 
         const formdata = new FormData();
         formdata.append("data", jsonData);
-        formdata.append("image", image);
+        if (img != null) {
+            formdata.append("image", img);
+        }
 
         const myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${bearerToken}`);
 
         const requestOptions = {
-            method: foodID > 0 ? "PUT" : "POST",
+            method: food.id > 0 ? "PUT" : "POST",
             headers: myHeaders,
             body: formdata,
         };
 
-        setIsLoading(true);
+        setLoading(true);
         fetch(url, requestOptions)
             .then(async (response) => {
                 const data = await response.json();
@@ -227,24 +220,28 @@ export default function InRoomDiningPage() {
                     throw new Error("500 Server Error");
                 }
                 getDataFoods();
-                setModalFood(false);
+                setShowEditFood(false);
             })
             .catch((error) => console.error(error))
             .finally(() => {
-                setIsLoading(false);
+                setLoading(false);
             });
     };
 
     const handleInsertAdditional = () => {
+        if (additional == null) {
+            return;
+        }
+
         const additionalData = JSON.stringify({
-            foodID: foodID,
-            name: additional,
-            price: additionalPrice,
+            foodID: food.id,
+            name: additional.name,
+            price: additional.price,
         });
 
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/food_add`;
-        if (additionalID && additionalID > 0) {
-            url += "/" + additionalID;
+        let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${food.id}/food_add`;
+        if (additional.id > 0) {
+            url += "/" + additional.id;
         }
 
         const myHeaders = new Headers();
@@ -252,7 +249,7 @@ export default function InRoomDiningPage() {
         myHeaders.append("Content-Type", "application/json");
 
         const requestOptions = {
-            method: additionalID > 0 ? "PUT" : "POST",
+            method: additional.id > 0 ? "PUT" : "POST",
             headers: myHeaders,
             body: additionalData,
         };
@@ -266,23 +263,19 @@ export default function InRoomDiningPage() {
                 if (result.response_code > 0) {
                     throw new Error("500 Server Error");
                 }
-                getAdditionalData();
+                getAdditionalData(food.id);
             })
             .catch((error) => console.error(error));
 
-        setAdditionalID(0);
-        setAdditional("");
-        setAdditionalPrice(0);
+        setAdditional(initialAdditional);
     };
 
     const handleEditAdditional = (value: FoodAdditionalType) => {
-        setAdditionalID(value.id);
-        setAdditional(value.name);
-        setAdditionalPrice(value.price);
+        setAdditional(value);
     };
 
-    const handleDeleteAdditional = async (id: number) => {
-        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodID}/food_add/${id}`;
+    const handleDeleteAdditional = async (foodId: number, id: number) => {
+        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/${foodId}/food_add/${id}`;
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
 
@@ -291,7 +284,7 @@ export default function InRoomDiningPage() {
             headers: myHeaders,
         };
 
-        setIsLoading(true);
+        setLoading(true);
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "This action cannot be undone!",
@@ -312,12 +305,11 @@ export default function InRoomDiningPage() {
                     if (result.response_code > 0) {
                         throw new Error("500 Server Error");
                     }
-                    getAdditionalData();
-                    setAddCategory(false);
+                    getAdditionalData(foodId);
                 })
                 .catch((error) => console.error(error))
                 .finally(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 });
         } else {
             Swal.fire("Cancelled", "Your item is safe :)", "info");
@@ -325,28 +317,35 @@ export default function InRoomDiningPage() {
     };
 
     const handleSubmitCategory = async () => {
+        if (category == null) {
+            return;
+        }
+
         const jsonData = JSON.stringify({
-            name: newCategory,
+            name: category.name,
         });
 
         let url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories`;
-        if (foodCategoryID && foodCategoryID > 0) {
-            url += "/" + foodCategoryID;
+        if (category.id > 0) {
+            url += "/" + category.id;
         }
 
         const formdata = new FormData();
         formdata.append("data", jsonData);
-        formdata.append("image", newCategoryImage ?? "");
+        if (img != null) {
+            formdata.append("image", img);
+        }
+
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
 
         const requestOptions = {
-            method: foodCategoryID > 0 ? "PUT" : "POST",
+            method: category.id > 0 ? "PUT" : "POST",
             headers: myHeaders,
             body: formdata,
         };
 
-        setIsLoading(true);
+        setLoading(true);
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "This action cannot be undone!",
@@ -368,11 +367,11 @@ export default function InRoomDiningPage() {
                         throw new Error("500 Server Error");
                     }
                     getDataFoodsCategory();
-                    setAddCategory(false);
+                    setShowEditCategory(false);
                 })
                 .catch((error) => console.error(error))
                 .finally(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 });
         } else {
             Swal.fire("Cancelled", "Your item is safe :)", "info");
@@ -380,19 +379,27 @@ export default function InRoomDiningPage() {
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setNewCategoryImage(file);
+        const files = e.target.files;
+        if (!files || files.length !== 1) {
+            return;
+        }
+
+        const file = files[0];        
+        setImg(file);
+        if (showEditCategory && category != null) {
+            setCategory({ ...category, img: file.name });
+        } else {
+            setFood({ ...food, img: file.name });
         }
     };
 
     const handleDeleteCategory = async () => {
-        if (foodCategoryID === 0) {
+        if (category == null || category.id === 0) {
             Swal.fire("Warning!", "Please select a category to delete", "info");
             return;
         }
 
-        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories/${foodCategoryID}`;
+        const url = `${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/food_categories/${category.id}`;
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + bearerToken);
 
@@ -428,151 +435,153 @@ export default function InRoomDiningPage() {
     return (
         <div className="grid gap-6">
             <Card className="col-span-2">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-h5 font-semibold">Food List</h1>
-                    {/* <Dropdown
-                        title={
-                            Category > 0
-                                ? (dataFoodsCategory &&
-                                    dataFoodsCategory
-                                        .filter((category: FoodCategoryType) => category.id === Category)
-                                        .map((filteredCategory: FoodCategoryType) => filteredCategory.name)
-                                        .join(", ")) ||
-                                "No Category Found"
-                                : "Select Category"
-                        }
-                    >
-                        <a
-                            href="#"
-                            className="dark:hover:text-dark hover:bg-light block px-6 py-2 text-sm"
-                            role="menuitem"
-                            onClick={() => {
-                                setCategory(0);
-                            }}
-                            id="menu-item-0"
-                        >
-                            All
-                        </a>
-                        {dataFoodsCategory &&
-                            dataFoodsCategory.map((category: FoodCategoryType, index: number) => (
-                                <a
-                                    href="#"
-                                    key={index + 100}
-                                    className="dark:hover:text-dark hover:bg-light block px-6 py-2 text-sm"
-                                    role="menuitem"
-                                    onClick={() => {
-                                        setCategory(category.id);
-                                    }}
-                                    id="menu-item-1"
-                                >
-                                    {category.name}
-                                </a>
-                            ))}
-                    </Dropdown> */}
+                <div className="w-full">
+                    <div className="flex justify-between items-center">
+                        <h1 className="text-h5 font-semibold">Food List</h1>
+                    </div>
+                    <ButtonActions
+                        valueSearch={search}
+                        onSearch={(e) => setSearch(e.target.value)}
+                        onClickRepeat={() => getDataFoods()}
+                        onClickAdd={() => {
+                            clearForm();
+                            setCategory(categories[0]);
+                            setShowEditFood(true);
+                        }}
+                    />
                 </div>
-                <ButtonActions onSearch={(e) => searchFood(e.target.value)} valueSearch={search} onClickAdd={() => {
-                    clearForm()
-                    setModalFood(modalFood ? false : true)
-                }} onClickRepeat={() => getDataFoods()} />
+                <div className="flex mt-5 gap-2">
+                    <div
+                        className={`${searchCategoryId === 0 && 'bg-primary-15'} flex text-dark dark:text-light border-[1px] rounded-full py-1 px-2 hover:bg-primary-15 cursor-pointer`}
+                        onClick={() =>  setSearchCategoryId(0)}
+                    >
+                        All Categories
+                    </div>
+                    {categories.map(v => (
+                        <div
+                            key={v.id}
+                            className={`${searchCategoryId === v.id && 'bg-primary-15'} flex text-dark dark:text-light border-[1px] rounded-full py-1 px-2 hover:bg-primary-15 cursor-pointer`}
+                            onClick={() =>  setSearchCategoryId(v.id)}
+                        >
+                            {v.name}
+                        </div>
+                    ))}
+                </div>
                 <table className="w-full mt-5">
                     <thead>
                         <tr className="text-start border-b-[1px] text-muted dark:text-light border-light">
-                            <td className="py-3 text-start font-medium">No.</td>
-                            <td className="py-3 text-start font-medium">Food Name</td>
-                            <td className="py-3 px-5 text-end font-medium">Price</td>
-                            <td className="py-3 px-5 text-end font-medium">Stock</td>
-                            <td className="py-3 px-10 text-center font-medium">Availability</td>
-                            <td className="py-3 text-start font-medium">Action</td>
+                            <td className="py-3 px-3 w-[50px] text-center font-medium">No.</td>
+                            <td className="py-3 px-3 text-start font-medium">Food Name</td>
+                            <td className="py-3 px-3 w-[100px] text-end font-medium">Price</td>
+                            <td className="py-3 px-3 w-[80px] text-end font-medium">Stock</td>
+                            <td className="py-3 px-3 w-[150px] text-center font-medium">Availability</td>
+                            <td className="py-3 px-3 w-[180px] text-start font-medium">Category</td>
+                            <td className="py-3 px-3 w-[50px] text-start font-medium">Action</td>
                         </tr>
                     </thead>
                     <tbody>
-                        {dataFoods &&
-                            dataFoods.map((food: FoodType, index: number) => (
-                                <FoodRow
-                                    key={food.id}
-                                    index={index + 1}
-                                    food={food}
-                                    onDelete={() => {
-                                        handleDeleteFood(food.id, food.categoryId);
-                                    }}
-                                    onEdit={() => {
-                                        handleEditFoods(food);
-                                        setModalFood(true);
-                                    }}
-                                />
-                            ))}
+                        {rows.map((food: FoodType, index: number) => (
+                            <FoodRow
+                                key={food.id}
+                                index={index + 1}
+                                food={food}
+                                onDelete={() => handleDeleteFood(food.id, food.categoryId)}
+                                onEdit={() => handleEditFoods(food)}
+                            />
+                        ))}
                     </tbody>
                 </table>
             </Card>
 
             <Modal
-                title={update ? "Update Food" : "Insert Food"}
-                show={modalFood}
-                onClosed={() => {
-                    setModalFood(modalFood ? false : true);
-                    setUpdate(false);
-                    setFoodCategoryID(0);
-                    setFoodID(0);
-                }}
+                title={food.id > 0 ? "Update Food" : "Insert Food"}
+                show={showEditFood || showEditCategory}
+                isLoading={loading}
                 onSave={(event: FormEvent<HTMLFormElement>) => handleInsertFood(event)}
-                isLoading={IsLoading}
+                onClosed={() => {
+                    setShowEditFood(false);
+                    setShowEditCategory(false);
+                    clearForm();
+                }}
             >
                 <div className="grid grid-cols-12 gap-2">
                     <InputGroup
                         theme="horizontal"
-                        options={
-                            dataFoodsCategory &&
-                            dataFoodsCategory.map((item) => ({
-                                value: item.id,
-                                name: item.name,
-                            }))
-                        }
-                        placeholder="Choice Category"
+                        options={categories.map(v => ({ value: v.id, name: v.name }))}
+                        placeholder="Choose Category"
                         label={"Category"}
                         type={"select"}
                         name="category"
                         className="col-span-10"
+                        value={food.categoryId}
                         onChangeSelect={(event) => {
                             const value = parseInt(event.target.value);
-                            const selectedOptionText = event.target.selectedOptions[0].text;
-                            setFoodCategoryID(value);
-                            setNewCategory(selectedOptionText);
+                            setFood({ ...food, categoryId: value });
+                            setCategory(categories.find(v => v.id === value));
                         }}
                     />
                     <div className="col-span-2">
-                        {addCategory ? (
-                            <Button theme="danger" onClick={() => setAddCategory(false)}>
+                        {showEditCategory ? (
+                            <Button
+                                theme="danger"
+                                onClick={() => {
+                                    if (food.id > 0) {
+                                        setCategory(food.foodCategory);
+                                    } else if (categories.length > 0) {
+                                        setCategory(categories[0]);
+                                    }
+                                    setShowEditCategory(false);
+                                }}
+                            >
                                 <FontAwesomeIcon icon={faRepeat} />
                             </Button>
                         ) : (
                             <div className="flex gap-2">
-                                <Button size="sm" className="px-2" onClick={() => {
-                                    setAddCategory(true);
-                                    setFoodCategoryID(0);
-                                    setNewCategory("");
-                                }}>
+                                <Button
+                                    size="sm"
+                                    className="px-2"
+                                    onClick={() => {
+                                        setCategory({ ...initialCategory, hotelId: hotelID! });
+                                        setShowEditCategory(true);
+                                    }}
+                                >
                                     <FontAwesomeIcon icon={faPlus} />
                                 </Button>
-                                <Button size="sm" theme={Category ? "warning" : "secondary"} className={`px-2 ${Category ? "" : "cursor-default"}`} onClick={() => setAddCategory(true)}>
+                                <Button
+                                    size="sm"
+                                    theme="warning"
+                                    className="px-2"
+                                    disabled={category == null || category.id <= 0}
+                                    onClick={() => setShowEditCategory(true)}
+                                >
                                     <FontAwesomeIcon icon={faEdit} />
                                 </Button>
-                                <Button size="sm" theme={Category ? "danger" : "secondary"} className={`px-2 ${Category ? "" : "cursor-default"}`} onClick={() => handleDeleteCategory()}>
+                                <Button
+                                    size="sm"
+                                    theme="danger"
+                                    className="px-2"
+                                    disabled={category == null || category.id <= 0}
+                                    onClick={() => handleDeleteCategory()}
+                                >
                                     <FontAwesomeIcon icon={faTrash} />
                                 </Button>
                             </div>
                         )}
                     </div>
                 </div>
-                {addCategory && (
+
+                {showEditCategory && (
                     <div className="grid grid-cols-12 gap-2">
                         <InputGroup
                             theme="horizontal"
                             label={"New Category"}
                             type={"text"}
-                            value={newCategory}
+                            value={category?.name}
                             className="col-span-11"
                             onChange={(e) => {
-                                setNewCategory(e.target.value);
+                                if (category != null) {
+                                    setCategory({ ...category, name: e.target.value });
+                                }
                             }}
                         />
                         <InputGroup theme="horizontal" label={"New Category Image"} type={"file"} className="col-span-11" onChange={(e) => handleImageChange(e)} />
@@ -583,85 +592,126 @@ export default function InRoomDiningPage() {
                         </div>
                     </div>
                 )}
-                <InputGroup theme="horizontal" label={"Food Name"} type={"text"} name="name" />
-                <InputGroup theme="horizontal" label={"Price"} type={"text"} name="price" />
-                <InputGroup theme="horizontal" label={"Stock"} type={"text"} name="stock" />
-                <InputGroup theme="horizontal" label={"Description"} type={"text"} name="description" />
-                {update && (
+
+                {!showEditCategory && (
                     <>
-                        <div className="grid grid-cols-12 gap-2">
-                            <InputGroup theme="horizontal" placeholder="Additional Name" label={"Additional"} type={"text"} className="col-span-11" value={additional} onChange={(e) => setAdditional(e.target.value)} />
-                            <InputGroup
-                                theme="horizontal"
-                                placeholder="Additional Price"
-                                label={""}
-                                type={"number"}
-                                className="col-span-11"
-                                value={additionalPrice}
-                                onChange={(e) => {
-                                    setAdditionalPrice(parseInt(e.target.value));
-                                }}
-                            />
-                            <div className="col-span-1 mt-2">
-                                <button onClick={() => handleInsertAdditional()} type="button" className="bg-primary text-light py-2 rounded-md px-5">
-                                    <FontAwesomeIcon icon={faPlus} />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2"></div>
-                            <table className="col-span-10">
-                                {additionalData ? (
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Action</th>
-                                    </tr>
-                                ) : (
-                                    <div></div>
-                                )}
-                                {additionalData &&
-                                    additionalData.map((value: FoodAdditionalType, index: number) => (
-                                        <tr key={index}>
-                                            <td className="p-2 text-center">{index + 1}</td>
-                                            <td className="p-2 text-center">{value.name}</td>
-                                            <td className="p-2 text-center">{value.price}</td>
-                                            <td className="p-2 space-x-3 text-center">
-                                                <Button theme="warning" className={`px-2`} onClick={() => handleEditAdditional(value)}>
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </Button>
-                                                <Button theme="danger" className={`px-2`} onClick={() => handleDeleteAdditional(value.id)}>
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                            </table>
-                        </div>
+                        <InputGroup
+                            theme="horizontal"
+                            label="Food Name"
+                            type="text"
+                            name="name"
+                            value={food.name}
+                            onChange={e => setFood({ ...food, name: e.target.value })}
+                        />
+                        <InputGroup
+                            theme="horizontal"
+                            label="Description"
+                            type="text"
+                            name="description"
+                            value={food.description}
+                            onChange={e => setFood({ ...food, description: e.target.value })}
+                        />
+                        <InputGroup
+                            theme="horizontal"
+                            label={"Image"}
+                            type={"file"}
+                            name="image"
+                            onChange={handleImageChange}
+                        />
+                        <InputGroup
+                            theme="horizontal"
+                            label="Price"
+                            type="text"
+                            name="price"
+                            value={food.price}
+                            onChange={e => setFood({ ...food, price: parseFloat(e.target.value) })}
+                        />
+                        <InputGroup
+                            theme="horizontal"
+                            label={"Favourite"}
+                            type={"switch"}
+                            checked={food.favorite != 1}
+                            name="favorite"
+                            onChange={() => setFood({ ...food, favorite: food.favorite ? 0 : 1 })}
+                        />
+                        <InputGroup
+                            theme="horizontal"
+                            label="Stock"
+                            type="text"
+                            name="stock"
+                            value={food.stock}
+                            onChange={e => setFood({ ...food, stock: parseInt(e.target.value) })}
+                        />
+                        <InputGroup
+                            theme="horizontal"
+                            label={"Availability"}
+                            type={"switch"}
+                            checked={food.availability}
+                            name="availability"
+                            onChange={() => setFood({ ...food, availability: !food.availability })}
+                        />
+
+                        {food.id > 0 && (
+                            <>
+                                <div className="grid grid-cols-12 gap-2">
+                                    <InputGroup
+                                        theme="horizontal"
+                                        placeholder="Additional Name"
+                                        label={"Additional"}
+                                        type={"text"}
+                                        className="col-span-11"
+                                        value={additional.name}
+                                        onChange={(e) => setAdditional({ ...additional, name: e.target.value })}
+                                    />
+                                    <InputGroup
+                                        theme="horizontal"
+                                        placeholder="Additional Price"
+                                        label={""}
+                                        type={"number"}
+                                        className="col-span-11"
+                                        value={additional.price}
+                                        onChange={(e) => setAdditional({ ...additional, price: parseInt(e.target.value) })}
+                                    />
+                                    <div className="col-span-1 mt-2">
+                                        <button onClick={() => handleInsertAdditional()} type="button" className="bg-primary text-light py-2 rounded-md px-5">
+                                            <FontAwesomeIcon icon={faPlus} />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-12">
+                                    <div className="col-span-2"></div>
+                                    <table className="col-span-10">
+                                        {additionals.length > 0 ? (
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        ) : (
+                                            <div></div>
+                                        )}
+                                        {additionals.map((value: FoodAdditionalType, index: number) => (
+                                            <tr key={index}>
+                                                <td className="p-2 text-center">{index + 1}</td>
+                                                <td className="p-2 text-center">{value.name}</td>
+                                                <td className="p-2 text-center">{value.price}</td>
+                                                <td className="p-2 space-x-3 text-center">
+                                                    <Button theme="warning" className={`px-2`} onClick={() => handleEditAdditional(value)}>
+                                                        <FontAwesomeIcon icon={faEdit} />
+                                                    </Button>
+                                                    <Button theme="danger" className={`px-2`} onClick={() => handleDeleteAdditional(food.id, value.id)}>
+                                                        <FontAwesomeIcon icon={faTrash} />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </table>
+                                </div>
+                            </>
+                        )}
                     </>
                 )}
-                <InputGroup theme="horizontal" label={"Image"} type={"file"} name="image" />
-                <InputGroup
-                    theme="horizontal"
-                    label={"Favourite"}
-                    type={"switch"}
-                    checked={favorite}
-                    name="favorite"
-                    onChange={() => {
-                        setFavorite(favorite ? false : true);
-                    }}
-                />
-                <InputGroup
-                    theme="horizontal"
-                    label={"Availability"}
-                    type={"switch"}
-                    checked={availability}
-                    name="availability"
-                    onChange={() => {
-                        setAvailability(availability ? false : true);
-                    }}
-                />
             </Modal>
         </div>
     );

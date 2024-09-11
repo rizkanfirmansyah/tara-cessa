@@ -3,9 +3,9 @@ interface FoodCategoryType {
     hotelId: number;
     name: string;
     img: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+    deletedAt?: string | null;
 }
 
 interface FoodType {
@@ -19,9 +19,9 @@ interface FoodType {
     availability: boolean;
     stock: number;
     favorite: number;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+    deletedAt?: string | null;
 }
 
 interface FoodAdditionalType {
@@ -29,8 +29,8 @@ interface FoodAdditionalType {
     foodId: number;
     name: string;
     price: number;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export type { FoodCategoryType, FoodType, FoodAdditionalType };

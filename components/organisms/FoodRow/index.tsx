@@ -17,8 +17,8 @@ interface FoodRowProps {
 const FoodRow = ({ index, food, onClick, onEdit, onDelete }: FoodRowProps) => {
     return (
         <tr onClick={onClick} className={`dark:bg-gray-700 dark:text-light text-muted text-start border-b-[1px] border-light hover:bg-primary dark:hover:bg-gray-700 px-4 hover:text-light rounded transition-all duration-300 `} data-id={food.favorite}>
-            <td className="py-2 w-[40px] text-center">{index}</td>
-            <td className="py-2">
+            <td className="py-2 px-3 text-center">{index}</td>
+            <td className="py-2 px-3">
                 <div className="flex gap-4">
                     <div className="w-[80px] h-[80px] rounded-xl overflow-clip">
                         <img src={`${process.env.NEXT_PUBLIC_URL}/files/${food.img}`} alt={`Image ${food.name}`} className="object-cover" />
@@ -29,10 +29,11 @@ const FoodRow = ({ index, food, onClick, onEdit, onDelete }: FoodRowProps) => {
                     </div>
                 </div>
             </td>
-            <td className="py-2 px-5 text-end">{FormatPrice(food.price)}</td>
-            <td className="py-2 px-5 text-end">{food.stock}</td>
-            <td className="py-2 px-10 text-center">{food.availability ? "Tersedia" : "Tidak Tersedia"}</td>
-            <td className="py-2">
+            <td className="py-2 px-3 text-end">{FormatPrice(food.price)}</td>
+            <td className="py-2 px-3 text-end">{food.stock}</td>
+            <td className="py-2 px-3 text-center">{food.availability ? "Tersedia" : "Tidak Tersedia"}</td>
+            <td className="py-2 px-3 text-start">{food.foodCategory.name}</td>
+            <td className="py-2 px-3">
                 <div className="flex gap-1 pr-2">
                     <Button theme="warning" onClick={onEdit}>
                         <FontAwesomeIcon icon={faEdit} />
