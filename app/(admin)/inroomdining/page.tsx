@@ -59,7 +59,6 @@ export default function InRoomDiningPage() {
 
     const { updateTitle } = useContext(MetaContext);
     const hotelID = useHotelStore((state) => state.hotelID);
-
     let user = userSession;
     let bearerToken = user?.token ?? '';
 
