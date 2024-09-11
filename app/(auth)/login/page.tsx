@@ -81,6 +81,9 @@ export default function LoginPage() {
                 if (data.data.role.frontdesk) {
                     router.replace("/");
                 }
+                if (data.data.role.order) {
+                    router.replace("/guest_order");
+                }
             } else {
                 Alert({ icon: "error", title: data.message });
             }
@@ -96,11 +99,7 @@ export default function LoginPage() {
     return (
         <div className="text-black dark:text-white dark:bg-slate-950">
             <div className="p-5">
-                <h1 className="text-subtitle font-semibold text-dark ps-3 dark:text-light">
-                    {/* {currentTheme == "dark" && <Image src={logoWhite} width={250} height={100} alt="logo" />}
-                    {currentTheme !== "dark" && <Image src={logoBlack} width={250} height={100} alt="logo" />} */}
-                    <h1 className="uppercase text-left text-h3 text-dark dark:text-white">Thara Canggu </h1>
-                </h1>
+                <h1 className="uppercase font-semibold text-left text-h3 text-dark dark:text-light">Thara Canggu </h1>
             </div>
             <div className="grid grid-cols-2 xl:gap-28 xl:my-8 xl:mx-32">
                 <div>

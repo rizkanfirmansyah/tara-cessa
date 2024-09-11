@@ -11,7 +11,7 @@ import { userSession } from "@/helpers/UserData";
 import { RoomManageType } from "@/types/RoomType";
 import { faPlus, faQrcode, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "./style.css";
 
@@ -27,8 +27,7 @@ export default function RoomDetail() {
     const updateDataDetail = useRoomStore((state) => state.updateDataDetail);
     let user = userSession;
     let bearerToken = user?.token ?? "";
-    const itemsPerPage = 20;
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const itemsPerPage = 21;
 
     useEffect(() => {
         getData();
@@ -309,7 +308,7 @@ export default function RoomDetail() {
                 </div>
 
                 <div className="flex justify-between">
-                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete Room</Button>
+                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete</Button>
                     <Button theme="primary" onClick={() => window.print()} >Print Data</Button>
                 </div>
             </Modal>

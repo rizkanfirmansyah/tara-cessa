@@ -1,7 +1,7 @@
 "use client";
 
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { faBed } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface RoomGridProps {
@@ -20,7 +20,7 @@ export default function RoomGrid({ name, active, onClick, icon }: RoomGridProps)
             data-id={active}
         >
             <FontAwesomeIcon
-                icon={icon ?? faDoorOpen}
+                icon={icon ?? faBed}
                 style={{ height: 24 }}
                 className="font-medium mx-2"
             />

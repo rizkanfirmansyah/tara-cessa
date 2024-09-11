@@ -8,7 +8,7 @@ import { useRoomStore } from "@/components/store/roomStore";
 import fetchCustom from "@/helpers/FetchCustom";
 import { hotelID, userSession } from "@/helpers/UserData";
 import { LoungeType, RoomManageType } from "@/types/RoomType";
-import { faBellConcierge, faDoorClosed, faPersonShelter, faRestroom } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faBellConcierge, faDoorClosed, faPersonShelter, faRestroom, faUtensils, faWaterLadder } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 
 export default function DashboardPage() {
@@ -22,118 +22,120 @@ export default function DashboardPage() {
     const updateDataRoom = useRoomStore((state) => state.updateData);
     const dataFoods = useFoodStore((state) => state.data);
     const updateDataFood = useFoodStore((state) => state.updateData);
-    let user = userSession;
-    let bearerToken = user?.token ?? "";
+    const user = userSession;
+    const bearerToken = user?.token ?? "";
 
     useEffect(() => {
-        getDataHotel();
-        getDataRoom();
-        getDataTable();
-        getDataPoolTable();
-        getDataFoods();
-    }, []);
-
-    function getDataHotel() {
-        let url = `${process.env.NEXT_PUBLIC_URL}/hotels`;
-        if (user.hotelID) {
-            url = `${process.env.NEXT_PUBLIC_URL}/hotels/${user.hotelID}`;
+        if (bearerToken.length === 0) {
+            return;
         }
-        if (dataHotels) {
-            fetchCustom<any>(url, bearerToken)
+
+        function getDataHotel() {
+            let url = `${process.env.NEXT_PUBLIC_URL}/hotels`;
+            if (user.hotelID) {
+                url = `${process.env.NEXT_PUBLIC_URL}/hotels/${user.hotelID}`;
+            }
+            if (dataHotels) {
+                fetchCustom<any>(url, bearerToken)
+                    .then((result) => {
+                        if (result.error) {
+                            throw new Error("500 Server Error");
+                        } else {
+                            updateDataHotel(result.data.data);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching data:", error);
+                    });
+            }
+        };
+    
+        function getDataRoom() {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/manage/hotels/${hotelID}/rooms`, bearerToken)
                 .then((result) => {
                     if (result.error) {
-                        throw new Error("500 Server Error");
+                        throw new Error(result.data.message);
                     } else {
-                        updateDataHotel(result.data.data);
+                        const res = result.data.data;
+                        updateDataRoom(res);
+                    }
+                })
+                .catch((error) => {
+                    // Alert({
+                    //     title: 'Warning',
+                    //     desc: error,
+                    //     icon: 'warning'
+                    // });
+                });
+        };
+    
+        function getDataTable() {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/tables`, bearerToken)
+                .then((result) => {
+                    if (result.error) {
+                        throw new Error(result.data.message);
+                    } else {
+                        const res = result.data.data;
+                        updateDataLounge(res);
+                    }
+                })
+                .catch((error) => {
+                    // Alert({
+                    //     title: 'Warning',
+                    //     desc: error,
+                    //     icon: 'warning'
+                    // });
+                });
+        };
+    
+        function getDataPoolTable() {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/pool-tables`, bearerToken)
+                .then((result) => {
+                    if (result.error) {
+                        throw new Error(result.data.message);
+                    } else {
+                        const res = result.data.data;
+                        updateDataPoolTables(res);
+                    }
+                })
+                .catch((error) => {
+                    // Alert({
+                    //     title: 'Warning',
+                    //     desc: error,
+                    //     icon: 'warning'
+                    // });
+                });
+        };
+    
+    
+        const getDataFoods = () => {
+            fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods`, bearerToken)
+                .then((result) => {
+                    if (result.error) {
+                        throw new Error("Error fteching");
+                    } else {
+                        updateDataFood(result.data.data);
                     }
                 })
                 .catch((error) => {
                     console.error("Error fetching data:", error);
                 });
-        }
-    };
+        };
 
-    function getDataRoom() {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/manage/hotels/${hotelID}/rooms`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(result.data.message);
-                } else {
-                    const res = result.data.data;
-                    updateDataRoom(res);
-                }
-            })
-            .catch((error) => {
-                // Alert({
-                //     title: 'Warning',
-                //     desc: error,
-                //     icon: 'warning'
-                // });
-            });
-    };
-
-    function getDataTable() {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/tables`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(result.data.message);
-                } else {
-                    const res = result.data.data;
-                    updateDataLounge(res);
-                }
-            })
-            .catch((error) => {
-                // Alert({
-                //     title: 'Warning',
-                //     desc: error,
-                //     icon: 'warning'
-                // });
-            });
-    };
-
-    function getDataPoolTable() {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/pool-tables`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(result.data.message);
-                } else {
-                    const res = result.data.data;
-                    updateDataPoolTables(res);
-                }
-            })
-            .catch((error) => {
-                // Alert({
-                //     title: 'Warning',
-                //     desc: error,
-                //     icon: 'warning'
-                // });
-            });
-    };
-
-
-    const getDataFoods = () => {
-        fetchCustom<any>(`${process.env.NEXT_PUBLIC_URL}/hotels/${hotelID}/foods`, bearerToken)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error("Error fteching");
-                } else {
-                    updateDataFood(result.data.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    };
-
-
+        getDataHotel();
+        getDataRoom();
+        getDataTable();
+        getDataPoolTable();
+        getDataFoods();
+    }, [bearerToken]);
 
     return (
         <div>
             <div className="grid grid-cols-4 gap-4">
                 {/* <CardChart theme="danger" icon={faCity} up={true} title={"Branchs"} value={"0"} /> */}
-                <CardChart theme="primary" icon={faDoorClosed} up={false} title={"Rooms/Table"} value={`${dataRooms?.length}`} />
-                <CardChart theme="secondary" icon={faPersonShelter} up={true} title={"Lounge/Table"} value={`${dataTables?.length}`} />
-                <CardChart icon={faRestroom} up={true} title={"Pool/Table"} value={`${dataPoolTables?.length ?? 0}`} />
+                <CardChart theme="primary" icon={faBed} up={false} title={"Rooms/Table"} value={`${dataRooms?.length}`} />
+                <CardChart theme="secondary" icon={faUtensils} up={true} title={"Lounge/Table"} value={`${dataTables?.length}`} />
+                <CardChart icon={faWaterLadder} up={true} title={"Pool/Table"} value={`${dataPoolTables?.length ?? 0}`} />
                 <CardChart icon={faBellConcierge} up={false} title={"Food"} value={`${dataFoods?.length}`} />
             </div>
             <div className="grid grid-cols-4 gap-4 mt-6">

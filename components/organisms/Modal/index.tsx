@@ -34,7 +34,7 @@ export default function Modal({ show, title, children, onClosed, onSave, isLoadi
                             {children}
                         </div>
                         <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 justify-end space-x-3">
-                            <button type="button" className="text-muted border-[1px] border-semimuted py-2 px-12 rounded-lg hover:bg-semimuted hover:text-light transition-all duration-300 font-medium" onClick={onClosed}>Closed</button>
+                            <button type="button" className="text-muted border-[1px] border-semimuted py-2 px-12 rounded-lg hover:bg-semimuted hover:text-light transition-all duration-300 font-medium" onClick={onClosed}>Close</button>
                             {onEdit ? (
                                 <button
                                     type="button"

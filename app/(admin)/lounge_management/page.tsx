@@ -21,7 +21,7 @@ export default function RoomManagementPage() {
 
     return (
         <div className="grid grid-cols-3">
-            <Card className="col-span-6 p-0">{(hotelID && hotelID > 0) ? <LoungeDetail /> : <PropertyNotSelect />}</Card>
+            <Card className="f col-span-6 p-0">{(hotelID && hotelID > 0) ? <LoungeDetail /> : <PropertyNotSelect />}</Card>
         </div>
     );
 }

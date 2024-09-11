@@ -8,8 +8,8 @@ import fetchCustom from "@/helpers/FetchCustom";
 import setFormEmpty from "@/helpers/FormInputCustom/empty";
 import setFormValue from "@/helpers/FormInputCustom/setform";
 import { userSession } from "@/helpers/UserData";
-import { LoungeType, RoomManageType } from "@/types/RoomType";
-import { faPersonShelter, faPlus, faQrcode, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { LoungeType } from "@/types/RoomType";
+import { faPlus, faQrcode, faRepeat, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -27,8 +27,7 @@ export default function LoungeDetail() {
     const updateDataDetail = useLoungeStore((state) => state.updateDataDetail);
     let user = userSession;
     let bearerToken = user?.token ?? "";
-    const itemsPerPage = 20;
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const itemsPerPage = 21;
 
     useEffect(() => {
         getData();
@@ -246,7 +245,7 @@ export default function LoungeDetail() {
                                 setModal(modal ? false : true);
                                 getDataRoom(rooms.id);
                             }}
-                            icon={faPersonShelter}
+                            icon={faUtensils}
                         />
                     ))}
                 </div>
@@ -270,7 +269,7 @@ export default function LoungeDetail() {
                 </div>
             )}
 
-            <Modal title={`${detailRoomID > 0 ? "Update Room" : "Insert Room"}`} show={modalRoom} onClosed={() => {
+            <Modal title={`${detailRoomID > 0 ? "Update Table" : "Insert Table"}`} show={modalRoom} onClosed={() => {
                 setFormEmpty();
                 setDetailRoomID(0);
                 setModalRoom(false);
@@ -286,7 +285,7 @@ export default function LoungeDetail() {
                 <InputGroup theme="horizontal" label={"Location"} type={"text"} name="location" />
             </Modal>
 
-            <Modal title={`Room: ${dataRoomDetail?.tableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
+            <Modal title={`Table: ${dataRoomDetail?.tableNo}`} show={modal} onClosed={() => setModal(modal ? false : true)} onEdit={() => {
                 setDetailRoomID(dataRoomDetail?.id || 0)
                 setFormValue("tableName", dataRoomDetail?.tableName)
                 setFormValue("tableNo", dataRoomDetail?.tableNo)
@@ -318,7 +317,7 @@ export default function LoungeDetail() {
                 </div>
 
                 <div className="flex justify-between">
-                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete Lounge</Button>
+                    <Button theme="danger" onClick={() => handleDeleteRoom(dataRoomDetail?.hotelId, dataRoomDetail?.id)} >Delete</Button>
 
                     <Button theme="primary" onClick={() => window.print()} >Print Data</Button>
                 </div>
