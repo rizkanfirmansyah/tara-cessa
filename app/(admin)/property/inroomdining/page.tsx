@@ -38,6 +38,7 @@ export default function InRoomDiningPage() {
     const updateData = useFoodStore((state) => state.updateData);
     const updateDataCategory = useFoodStore((state) => state.updateDataCategory);
     const additionalData = useFoodStore((state) => state.additionalData);
+    const [imageString, setImageString] = useState<string | null>(null);
     const updateAdditionalData = useFoodStore((state) => state.updateAdditionalData);
     let user = userSession;
     let bearerToken = user?.token ?? "";
@@ -177,11 +178,21 @@ export default function InRoomDiningPage() {
         setUpdate(false);
     }
 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+
+        if (file) {
+            setImageString(file.name as string);
+        }
+    };
+
     const handleInsertFood = async (event: FormEvent<HTMLFormElement>) => {
         event && event.preventDefault();
 
         const formData = new FormData(event && event.currentTarget);
         const name = formData.get("name") as string;
+        const image_name = formData.get("image") as string;
         const description = formData.get("description") as string;
         const stock = parseInt(formData.get("stock") as string);
         const price = parseInt(formData.get("price") as string);
@@ -191,6 +202,7 @@ export default function InRoomDiningPage() {
 
         const jsonData = JSON.stringify({
             name,
+            img: imageString,
             description,
             stock,
             price,
@@ -641,7 +653,7 @@ export default function InRoomDiningPage() {
                         </div>
                     </>
                 )}
-                <InputGroup theme="horizontal" label={"Image"} type={"file"} name="image" />
+                <InputGroup theme="horizontal" label={"Image"} type={"file"} name="image" onChange={handleFileChange} />
                 <InputGroup
                     theme="horizontal"
                     label={"Favourite"}
