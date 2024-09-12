@@ -165,6 +165,7 @@ export default function InRoomDiningPage() {
     };
 
     const handleEditFoods = (food: FoodType) => {
+        clearForm();
         getAdditionalData(food.id);
         setFood(food);
         setCategory(food.foodCategory);
