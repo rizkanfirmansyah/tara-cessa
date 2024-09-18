@@ -450,7 +450,7 @@ export default function InRoomDiningPage() {
                         }}
                     />
                 </div>
-                <div className="flex mt-5 gap-2">
+                <div className="flex mt-5 gap-2 flex-wrap">
                     <div
                         className={`${searchCategoryId === 0 && 'bg-primary-15'} flex text-dark dark:text-light border-[1px] rounded-full py-1 px-2 hover:bg-primary-15 cursor-pointer`}
                         onClick={() =>  setSearchCategoryId(0)}
