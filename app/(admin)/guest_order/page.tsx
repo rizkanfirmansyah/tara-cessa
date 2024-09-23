@@ -64,7 +64,7 @@ const zeroPad = (n: number) => {
 const getTimeDate = (timestamp: string) => {
     const dateObject = new Date(timestamp);
     const time = `${zeroPad(dateObject.getHours())}:${zeroPad(dateObject.getMinutes())}`;
-    const date = `${dateObject.getFullYear()}-${zeroPad(dateObject.getMonth())}-${zeroPad(dateObject.getDate())}`;
+    const date = `${dateObject.getFullYear()}-${zeroPad(dateObject.getMonth() + 1)}-${zeroPad(dateObject.getDate())}`;
 
     return `${date} ${time}`;
 }
