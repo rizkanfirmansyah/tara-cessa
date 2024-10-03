@@ -565,7 +565,7 @@ export default function GuestOrderPage({ }) {
                                             {food.note.split('\n').map((line, index) => {
                                                 const keyVal = line.split(':');
 
-                                                if (keyVal[0] === '') {
+                                                if (keyVal[0] === '' || keyVal[0] === 'Quantity') {
                                                     return null;
                                                 }
 
