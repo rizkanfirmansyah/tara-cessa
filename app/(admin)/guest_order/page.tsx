@@ -574,7 +574,7 @@ export default function GuestOrderPage({ }) {
 
                                                 if (keyVal[0] !== 'Note' && keyVal[0] !== 'Additional') {
                                                     return (
-                                                        <p>Note:<br />{keyVal[0]}</p>
+                                                        <p key={index}>Note:<br />{keyVal[0]}</p>
                                                     )
                                                 }
 
