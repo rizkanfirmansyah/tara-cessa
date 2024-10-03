@@ -559,10 +559,29 @@ export default function GuestOrderPage({ }) {
                         <div className="w-full mt-2">
                             {dataDetail.foodItems &&
                                 dataDetail.foodItems.map((food, index: number) => (
-                                    <div key={index + 1} className={`flex justify-between items-center border-b-[1px] border-semigray py-6 ${index === dataDetail.foodItems.length - 1 ? "border-dashed mb-10" : ""}`}>
+                                    <div key={index + 1} className={`flex justify-between items-start border-b-[1px] border-semigray py-6 ${index === dataDetail.foodItems.length - 1 ? "border-dashed mb-10" : ""}`}>
                                         <div>
-                                            <p>{food.name}</p>
-                                            <p dangerouslySetInnerHTML={{ __html: food.note.replace(/(:|,)/g, '$1<br/>') }}></p>
+                                            <p style={{ marginBottom: 10 }}><b>{food.name}</b></p>
+                                            {food.note.split('\n').map((line, index) => {
+                                                const keyVal = line.split(':');
+
+                                                if (keyVal[0] === '') {
+                                                    return null;
+                                                }
+
+                                                return (
+                                                    <p key={index}>
+                                                        {keyVal[0]}: &nbsp; 
+                                                        {keyVal.length > 1 && keyVal[1].trim() !== '' ? (
+                                                            <span
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: keyVal[1],
+                                                                }}
+                                                            />
+                                                        ): '-'}
+                                                    </p>
+                                                );
+                                            })}
                                         </div>
                                         <p className="border border-semigray px-4 py-1">{food.qty}</p>
                                         <p>{FormatPrice(food.price)}</p>
