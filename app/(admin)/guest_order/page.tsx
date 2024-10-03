@@ -562,11 +562,20 @@ export default function GuestOrderPage({ }) {
                                     <div key={index + 1} className={`flex justify-between items-start border-b-[1px] border-semigray py-6 ${index === dataDetail.foodItems.length - 1 ? "border-dashed mb-10" : ""}`}>
                                         <div>
                                             <p style={{ marginBottom: 10 }}><b>{food.name}</b></p>
+                                            {food.note == null || food.note.length === 0 && (
+                                                <p>Note: -</p>
+                                            )}
                                             {food.note.split('\n').map((line, index) => {
                                                 const keyVal = line.split(':');
 
                                                 if (keyVal[0] === '' || keyVal[0] === 'Quantity') {
                                                     return null;
+                                                }
+
+                                                if (keyVal[0] !== 'Note' && keyVal[0] !== 'Additional') {
+                                                    return (
+                                                        <p>Note:<br />{keyVal[0]}</p>
+                                                    )
                                                 }
 
                                                 return (
