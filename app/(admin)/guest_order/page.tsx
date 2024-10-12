@@ -1,6 +1,6 @@
 "use client";
 import { MetaContext } from "@/app/MetaProvider";
-import { Button, Card, CardFood } from "@/components";
+import { Button, Card, CardFood, ToogleMode, Toggle } from "@/components";
 import { imageFood, imageFood2, imageFood3, imageFood4 } from "@/components/atoms/Images";
 import { useOrderStore } from "@/components/store/guestOrderStore";
 import { useHotelStore } from "@/components/store/hotelStore";
@@ -328,6 +328,53 @@ export default function GuestOrderPage({ }) {
         }
     };
 
+    const handleChangeStatusOpenResto = async () => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "Ingin mengubah status order?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, save it!",
+        });
+
+        if (result.isConfirmed) {
+            let url = `${process.env.NEXT_PUBLIC_URL}/hotels/resto`;
+
+            let data: Object = {
+                "id": hotelID,
+                "restoOpen": 1,
+            };
+            const jsonData = JSON.stringify(data);
+            const myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + bearerToken);
+            myHeaders.append("Content-Type", "application/json");
+            const requestOptions = {
+                method: "PUT",
+                headers: myHeaders,
+                body: jsonData,
+            };
+
+            fetch(url, requestOptions)
+                .then(async (response) => {
+                    const data = await response.json();
+                    return data;
+                })
+                .then((result) => {
+                    if (result.response_code > 0) {
+                        throw new Error("500 Server Error");
+                    }
+                    getDataOrder(hotelID ?? 0);
+                })
+                .catch((error) => console.error(error))
+                .finally(() => {
+                });
+        } else {
+            Swal.fire("Cancelled", "Cancelled!!", "info");
+        }
+    };
+
 
     useEffect(() => {
         updateTitle("Order");
@@ -355,81 +402,85 @@ export default function GuestOrderPage({ }) {
             <audio ref={audioRef} src="/assets/notification-alert.mp3" />
             <div className={`${detail ? "col-span-2" : "col-span-3"} no-print`}>
                 <Card>
-                    <div className="flex gap-5 items-center -my-2 -mx-2">
-                        <div className="flex border-muted border-[1px] rounded-full">
-                            <div
-                                className={`${filterSource === "all" ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-l-full p-3 pl-5`}
-                                onClick={() => setFilterSource('all')}
-                                title="All Data"
-                            >
-                                <div className="flex items-center gap-2 px-1">
-                                    <FontAwesomeIcon icon={faList} className="h-3.5" />
+                    <div className="flex gap-5 items-center justify-between -my-2 -mx-2">
+                        <div className="flex space-x-10">
+                            <div className="flex border-muted border-[1px] rounded-full">
+                                <div
+                                    className={`${filterSource === "all" ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-l-full p-3 pl-5`}
+                                    onClick={() => setFilterSource('all')}
+                                    title="All Data"
+                                >
+                                    <div className="flex items-center gap-2 px-1">
+                                        <FontAwesomeIcon icon={faList} className="h-3.5" />
+                                        All
+                                    </div>
+                                </div>
+                                <div
+                                    className={`${filterSource === "room" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
+                                    onClick={() => setFilterSource('room')}
+                                    title="Room Data"
+                                >
+                                    <div className="flex items-center gap-2 px-1">
+                                        <FontAwesomeIcon icon={faBed} className="h-3.5" />
+                                        Room
+                                    </div>
+                                </div>
+                                <div
+                                    className={`${filterSource === "table" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
+                                    onClick={() => setFilterSource('table')}
+                                    title="Lounge Data"
+                                >
+                                    <div className="flex items-center gap-2 px-1">
+                                        <FontAwesomeIcon icon={faUtensils} className="h-3.5" />
+                                        Lounge
+                                    </div>
+                                </div>
+                                <div
+                                    className={`${filterSource === "pooltable" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-r-full p-3 pr-5`}
+                                    onClick={() => setFilterSource('pooltable')}
+                                    title="Pool Table Data">
+                                    <div className="flex items-center gap-2 px-1">
+                                        <FontAwesomeIcon icon={faWaterLadder} className="h-3.5" />
+                                        Pool
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex border-muted border-[1px] rounded-full">
+                                <div
+                                    className={`${filterStatus.length === 0 ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-l-full p-3 pl-5`}
+                                    onClick={() => setFilterStatus([])}
+                                >
                                     All
                                 </div>
-                            </div>
-                            <div
-                                className={`${filterSource === "room" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
-                                onClick={() => setFilterSource('room')}
-                                title="Room Data"
-                            >
-                                <div className="flex items-center gap-2 px-1">
-                                    <FontAwesomeIcon icon={faBed} className="h-3.5" />
-                                    Room
+                                <div
+                                    className={`${filterStatus.indexOf('Preparing') >= 0 ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer p-3`}
+                                    onClick={() => setFilterStatus(['In Order', 'Preparing', 'Verified'])}
+                                >
+                                    Kitchen
                                 </div>
-                            </div>
-                            <div 
-                                className={`${filterSource === "table" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`} 
-                                onClick={() => setFilterSource('table')}
-                                title="Lounge Data"
-                            >
-                                <div className="flex items-center gap-2 px-1">
-                                    <FontAwesomeIcon icon={faUtensils} className="h-3.5" />
-                                    Lounge
+                                <div
+                                    className={`${filterStatus.indexOf('Delivery') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
+                                    onClick={() => setFilterStatus(['Delivery'])}
+                                >
+                                    Delivery
                                 </div>
-                            </div>
-                            <div
-                                className={`${filterSource === "pooltable" ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer rounded-r-full p-3 pr-5`}
-                                onClick={() => setFilterSource('pooltable')}
-                                title="Pool Table Data">
-                                <div className="flex items-center gap-2 px-1">
-                                    <FontAwesomeIcon icon={faWaterLadder} className="h-3.5" />
-                                    Pool
+                                <div
+                                    className={`${filterStatus.indexOf('Arrived') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
+                                    onClick={() => setFilterStatus(['Arrived'])}
+                                >
+                                    Payment
+                                </div>
+                                <div
+                                    className={`${filterStatus.indexOf('Completed') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3 pr-5 rounded-r-full`}
+                                    onClick={() => setFilterStatus(['Paid', 'Completed'])}
+                                >
+                                    Completed
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex border-muted border-[1px] rounded-full">
-                            <div
-                                className={`${filterStatus.length === 0 ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer rounded-l-full p-3 pl-5`}
-                                onClick={() => setFilterStatus([])}
-                            >
-                                All
-                            </div>
-                            <div
-                                className={`${filterStatus.indexOf('Preparing') >= 0 ? "bg-primary-15 text-dark dark:text-light" : "bg-transparent hover:text-primary text-muted hover:bg-primary-15"} transition-all duration-300 cursor-pointer p-3`}
-                                onClick={() => setFilterStatus(['In Order', 'Preparing', 'Verified'])}
-                            >
-                                Kitchen
-                            </div>
-                            <div
-                                className={`${filterStatus.indexOf('Delivery') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`}
-                                onClick={() => setFilterStatus(['Delivery'])}
-                            >
-                                Delivery
-                            </div>
-                            <div 
-                                className={`${filterStatus.indexOf('Arrived') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3`} 
-                                onClick={() => setFilterStatus(['Arrived'])}
-                            >
-                                Payment
-                            </div>
-                            <div 
-                                className={`${filterStatus.indexOf('Completed') >= 0 ? 'bg-primary-15 text-dark dark:text-light' : 'bg-transparent hover:text-primary text-muted hover:bg-primary-15'} cursor-pointer p-3 pr-5 rounded-r-full`} 
-                                onClick={() => setFilterStatus(['Paid', 'Completed'])}
-                            >
-                                Completed
-                            </div>
-                        </div>
+                        <Toggle title="Services Order" onChange={handleChangeStatusOpenResto} />
                     </div>
                 </Card>
                 {tab === "order" && (
@@ -580,14 +631,14 @@ export default function GuestOrderPage({ }) {
 
                                                 return (
                                                     <p key={index}>
-                                                        {keyVal[0]}: &nbsp; 
+                                                        {keyVal[0]}: &nbsp;
                                                         {keyVal.length > 1 && keyVal[1].trim() !== '' ? (
                                                             <span
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: keyVal[1],
                                                                 }}
                                                             />
-                                                        ): '-'}
+                                                        ) : '-'}
                                                     </p>
                                                 );
                                             })}
