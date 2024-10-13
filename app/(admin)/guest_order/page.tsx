@@ -1,9 +1,10 @@
 "use client";
 import { MetaContext } from "@/app/MetaProvider";
-import { Button, Card, CardFood, ToogleMode, Toggle } from "@/components";
+import { Card, CardFood, Toggle } from "@/components";
 import { imageFood, imageFood2, imageFood3, imageFood4 } from "@/components/atoms/Images";
 import { useOrderStore } from "@/components/store/guestOrderStore";
 import { useHotelStore } from "@/components/store/hotelStore";
+import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import FormatPrice from "@/helpers/FormatPrice";
 import { userSession } from "@/helpers/UserData";
@@ -13,7 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import './style.css';
-import { Alert } from "@/helpers/Alert";
 type Status = 'Completed' | 'Paid' | 'Arrived' | 'Delivery' | 'Preparing' | 'Verified' | 'In Order';
 type OrderSource = 'all' | 'room' | 'table' | 'pooltable';
 
@@ -369,6 +369,7 @@ export default function GuestOrderPage({ }) {
                 })
                 .catch((error) => console.error(error))
                 .finally(() => {
+                    getDataHotel();
                 });
         } else {
             Swal.fire("Cancelled", "Cancelled!!", "info");
@@ -378,6 +379,7 @@ export default function GuestOrderPage({ }) {
 
     useEffect(() => {
         updateTitle("Order");
+        getDataHotel();
         return () => {
             updateTitle("Dashboard");
         };
@@ -480,7 +482,7 @@ export default function GuestOrderPage({ }) {
                             </div>
                         </div>
 
-                        <Toggle title="Services Order" onChange={handleChangeStatusOpenResto} />
+                        <Toggle title="Services Order" onChange={handleChangeStatusOpenResto} hotel={dataHotel} />
                     </div>
                 </Card>
                 {tab === "order" && (

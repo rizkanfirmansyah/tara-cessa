@@ -9,6 +9,7 @@ interface HotelType {
   defaultGreeting: string;
   defaultLink: string;
   apiKey: string;
+  restoOpen: number;
   createdAt: string;
   updatedAt: string;
 }
