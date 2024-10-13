@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components";
+import Button from "@/components/atoms/Button";
 import { RoomManageType } from "@/types/RoomType";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

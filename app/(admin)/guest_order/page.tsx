@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import './style.css';
+import Button from "@/components/atoms/Button";
 type Status = 'Completed' | 'Paid' | 'Arrived' | 'Delivery' | 'Preparing' | 'Verified' | 'In Order';
 type OrderSource = 'all' | 'room' | 'table' | 'pooltable';
 

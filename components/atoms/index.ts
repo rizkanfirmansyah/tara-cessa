@@ -6,4 +6,4 @@ import { imageHotel1 } from "./Images";
 import Button from "./Button";
 import Toggle from "./Toggle";
 
-export { InputBox, Label, Card, iconChat, imageHotel1, Toggle };
+export { InputBox, Label, Card, iconChat, imageHotel1, Toggle, Button };
