@@ -53,7 +53,7 @@ const getTextColor = (order: OrderType): string => {
     if (order.arrived === 1) return "light";
     if (order.delivery === 1) return "dark dark:text-light";
     if (order.preparing === 1) return "light";
-    if (order.verified === 1) return "dark dark:text-light"; O
+    if (order.verified === 1) return "dark dark:text-light";
 
     return "dark dark:text-light";
 };

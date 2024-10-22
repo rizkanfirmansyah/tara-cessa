@@ -4,7 +4,7 @@ interface toogleProps {
     title: string;
     value?: string;
     onChange?: () => void;
-    hotel?: HotelType;
+    hotel?: HotelType | undefined | null;
 }
 
 export default function Toggle({ title, onChange, value, hotel }: toogleProps) {
