@@ -53,7 +53,7 @@ const getTextColor = (order: OrderType): string => {
     if (order.arrived === 1) return "light";
     if (order.delivery === 1) return "dark dark:text-light";
     if (order.preparing === 1) return "light";
-    if (order.verified === 1) return "dark dark:text-light";
+    if (order.verified === 1) return "dark dark:text-light"; O
 
     return "dark dark:text-light";
 };
@@ -84,11 +84,10 @@ export default function GuestOrderPage({ }) {
     const [newOrderId, setNewOrderId] = useState(0)
     const { updateTitle } = useContext(MetaContext);
     const datas = useOrderStore((state) => state.data);
-    // const dataDetail = useOrderStore((state) => state.dataDetail);
     const hotelID = useHotelStore((state) => state.hotelID);
     const updateData = useOrderStore((state) => state.updateData);
-    const dataHotel = useHotelStore((state) => state.data);
-    const updateDataHotel = useHotelStore((state) => state.updateData);
+    const dataHotel = useHotelStore((state) => state.dataRow);
+    const updateDataHotel = useHotelStore((state) => state.updateDataRow);
     let user = userSession;
     let bearerToken = user?.token ?? "";
     const [currentPage, setCurrentPage] = useState(1);
@@ -244,22 +243,30 @@ export default function GuestOrderPage({ }) {
         countSubHarga(value)
     };
 
-    const getDataHotel = () => {
+    const getDataHotel = async (reload: boolean = false) => {
+        console.log("Fetching hotel data...");
         let url = `${process.env.NEXT_PUBLIC_URL}/hotels`;
         let bearerToken = user.token;
-        if (dataHotel && dataHotel?.length < 1) {
-            fetchCustom<any>(url, bearerToken)
-                .then((result) => {
-                    if (result.error) {
-                    } else {
-                        updateDataHotel(result.data.data);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching data:", error);
-                });
+
+        if (dataHotel && dataHotel.length < 1 || reload) {
+            try {
+                const result = await fetchCustom<any>(url, bearerToken);
+                if (result.error) {
+                    console.error("Error fetching hotel data:", result.error);
+                } else {
+                    result.data.data.map((value: any, key: any) => {
+                        if (value.id == hotelID) {
+                            updateDataHotel(value);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
     };
+
+
 
     function countSubHarga(value: OrderType) {
         let dataHarga = 0;
@@ -345,7 +352,7 @@ export default function GuestOrderPage({ }) {
 
             let data: Object = {
                 "id": hotelID,
-                "restoOpen": 1,
+                "restoOpen": dataHotel?.restoOpen == 1 ? 0 : 1,
             };
             const jsonData = JSON.stringify(data);
             const myHeaders = new Headers();
@@ -362,15 +369,16 @@ export default function GuestOrderPage({ }) {
                     const data = await response.json();
                     return data;
                 })
-                .then((result) => {
+                .then(async (result) => {
                     if (result.response_code > 0) {
                         throw new Error("500 Server Error");
                     }
-                    getDataOrder(hotelID ?? 0);
+                    // await getDataOrder(hotelID ?? 0);
                 })
                 .catch((error) => console.error(error))
-                .finally(() => {
-                    getDataHotel();
+                .finally(async () => {
+                    await getDataHotel(true);
+                    console.log(dataHotel)
                 });
         } else {
             Swal.fire("Cancelled", "Cancelled!!", "info");

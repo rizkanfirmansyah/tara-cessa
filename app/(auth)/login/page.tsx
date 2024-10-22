@@ -59,7 +59,7 @@ export default function LoginPage() {
                 },
                 body: JSON.stringify({}),
             });
-    
+
             const data = await response.json();
             if (response.ok) {
                 login(data.data.token, data.data);

@@ -4,11 +4,11 @@ interface toogleProps {
     title: string;
     value?: string;
     onChange?: () => void;
-    hotel?: HotelType[];
+    hotel?: HotelType;
 }
 
 export default function Toggle({ title, onChange, value, hotel }: toogleProps) {
-    let hotelData = hotel ? hotel[0] : null;
+    let hotelData = hotel ? hotel : null;
     return (
         <label className="inline-flex items-center cursor-pointer">
             <input
