@@ -244,7 +244,6 @@ export default function GuestOrderPage({ }) {
     };
 
     const getDataHotel = async (reload: boolean = false) => {
-        console.log("Fetching hotel data...");
         let url = `${process.env.NEXT_PUBLIC_URL}/hotels`;
         let bearerToken = user.token;
 
@@ -388,7 +387,7 @@ export default function GuestOrderPage({ }) {
 
     useEffect(() => {
         updateTitle("Order");
-        getDataHotel();
+        getDataHotel(true);
         return () => {
             updateTitle("Dashboard");
         };
