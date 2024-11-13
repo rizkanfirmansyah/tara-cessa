@@ -1,5 +1,6 @@
 "use client";
 import { OptionType } from "@/types";
+import { randomInt, randomUUID } from "crypto";
 
 interface inputProps {
     type: string;
@@ -67,56 +68,66 @@ export default function InputBox({ type, name, placeholder, onChange, value, cla
             {type === "select" && onChange && (
                 <select
                     id="countries"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary w-full col-span-3 p-2.5 dark:bg-light dark:border-dark dark:placeholder-dark dark:text-dark dark:focus:ring-primary dark:focus:border-primary"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary w-full col-span-3 p-2.5 dark:bg-light dark:border-dark dark:placeholder-dark dark:text-dark dark:focus:ring-primary dark:focus:border-primary capitalize"
                     value={value}
                     name={name}
                     onChange={onChange}
                 >
+                    <option className="w-full " value={""} key={100}>
+                        <a className="capitalize">== select {name} ==</a>
+                    </option>
                     {options &&
                         options.map((option: OptionType, key: number) => (
                             <option className="w-full" value={option.value} key={key}>
                                 {option.name}
                             </option>
                         ))}
-                </select>
-            )}
-            {type === "select" && !onChange && (
-                <select
-                    id="countries"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary w-full col-span-3 p-2.5 dark:bg-light dark:border-dark dark:placeholder-dark dark:text-dark dark:focus:ring-primary dark:focus:border-primary"
-                    value={value}
-                    name={name}
-                    onChange={onChange}
-                >
-                    {options &&
-                        options.map((option: OptionType, key: number) => (
-                            <option className="w-full" value={option.value} key={key}>
-                                {option.name}
-                            </option>
-                        ))}
-                </select>
-            )}
-            {type !== "switch" && type !== "textarea" && type !== "select" && type !== 'date' && type !== 'time' && onChange && (
-                <input
-                    type={type}
-                    name={name || "username"}
-                    placeholder={placeholder || "Input something here..."}
-                    className={`block text-body text-semidark p-[12px] border-muted-line border-[0.5px] w-full rounded-lg mt-1 dark:bg-light dark:text-dark ${className} `}
-                    onChange={onChange}
-                    value={value}
-                    disabled={disabled}
-                />
-            )}
-            {type !== "switch" && type !== "textarea" && type !== "select" && type !== 'date' && type !== 'time' && !onChange && (
-                <input
-                    type={type}
-                    disabled={disabled}
-                    name={name || "username"}
-                    // value={value && value}
-                    placeholder={placeholder || "Input something here..."}
-                    className={`block text-body text-semidark p-[12px] border-muted-line border-[0.5px] w-full rounded-lg mt-1 dark:bg-light dark:text-dark ${className} ${disabled && 'cursor-not-allowed  '}`}
-                />
-            )}
+                </select >
+            )
+            }
+            {
+                type === "select" && !onChange && (
+                    <select
+                        id="countries"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary w-full col-span-3 p-2.5 dark:bg-light dark:border-dark dark:placeholder-dark dark:text-dark dark:focus:ring-primary dark:focus:border-primary"
+                        value={value}
+                        name={name}
+                        onChange={onChange}
+                    >
+                        {options &&
+                            options.map((option: OptionType, key: number) => (
+                                <option className="w-full" value={option.value} key={key}>
+                                    {option.name}
+                                </option>
+                            ))}
+                    </select>
+                )
+            }
+            {
+                type !== "switch" && type !== "textarea" && type !== "select" && type !== 'date' && type !== 'time' && onChange && (
+                    <input
+                        type={type}
+                        name={name || "username"}
+                        placeholder={placeholder || "Input something here..."}
+                        className={`block text-body text-semidark p-[12px] border-muted-line border-[0.5px] w-full rounded-lg mt-1 dark:bg-light dark:text-dark ${className} `}
+                        onChange={onChange}
+                        value={value}
+                        disabled={disabled}
+                    />
+                )
+            }
+            {
+                type !== "switch" && type !== "textarea" && type !== "select" && type !== 'date' && type !== 'time' && !onChange && (
+                    <input
+                        type={type}
+                        disabled={disabled}
+                        name={name || "username"}
+                        // value={value && value}
+                        placeholder={placeholder || "Input something here..."}
+                        className={`block text-body text-semidark p-[12px] border-muted-line border-[0.5px] w-full rounded-lg mt-1 dark:bg-light dark:text-dark ${className} ${disabled && 'cursor-not-allowed  '}`}
+                    />
+                )
+            }
         </>
     );
 }

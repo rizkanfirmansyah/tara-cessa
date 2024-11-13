@@ -2,6 +2,7 @@
 import { MetaContext } from "@/app/MetaProvider";
 import { Button, ButtonActions, Card, FoodRow, InputGroup, Modal } from "@/components";
 import { useHotelStore } from "@/components/store/hotelStore";
+import { Alert } from "@/helpers/Alert";
 import fetchCustom from "@/helpers/FetchCustom";
 import { userSession } from "@/helpers/UserData";
 import { FoodType } from "@/types";
@@ -200,6 +201,16 @@ export default function InRoomDiningPage() {
             formdata.append("image", img);
         }
 
+        let data = JSON.parse(jsonData);
+        if (data.categoryId < 1) {
+            Alert({
+                icon: "warning",
+                title: "Category not selected",
+                desc: "Category cannot be null, Try Again!"
+            });
+            return 0;
+        }
+
         const myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${bearerToken}`);
 
@@ -384,7 +395,7 @@ export default function InRoomDiningPage() {
             return;
         }
 
-        const file = files[0];        
+        const file = files[0];
         setImg(file);
         if (showEditCategory && category != null) {
             setCategory({ ...category, img: file.name });
@@ -453,7 +464,7 @@ export default function InRoomDiningPage() {
                 <div className="flex mt-5 gap-2 flex-wrap">
                     <div
                         className={`${searchCategoryId === 0 && 'bg-primary-15'} flex text-dark dark:text-light border-[1px] rounded-full py-1 px-2 hover:bg-primary-15 cursor-pointer`}
-                        onClick={() =>  setSearchCategoryId(0)}
+                        onClick={() => setSearchCategoryId(0)}
                     >
                         All Categories
                     </div>
@@ -461,7 +472,7 @@ export default function InRoomDiningPage() {
                         <div
                             key={v.id}
                             className={`${searchCategoryId === v.id && 'bg-primary-15'} flex text-dark dark:text-light border-[1px] rounded-full py-1 px-2 hover:bg-primary-15 cursor-pointer`}
-                            onClick={() =>  setSearchCategoryId(v.id)}
+                            onClick={() => setSearchCategoryId(v.id)}
                         >
                             {v.name}
                         </div>
